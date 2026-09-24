@@ -21,8 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend source code
 COPY api.py .
-COPY chana/ ./chana/
-COPY chana_model.onnx .
+COPY oclast/ ./oclast/
+COPY oclast_model.onnx .
 
 # Copy built frontend assets to be served by FastAPI
 COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist

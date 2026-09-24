@@ -1,6 +1,6 @@
-# CHANA Dashboard
+# OCLAST Dashboard
 
-The CHANA Dashboard is a efficient, full-stack application built to run state-of-the-art deep learning models for automated cell segmentation, circularity analysis, and spatial morphology mapping on _in vitro_, TRAP-stained osteoclasts.
+The OCLAST Dashboard is an efficient, full-stack application built to run state-of-the-art deep learning models for automated cell segmentation, circularity analysis, and spatial morphology mapping on _in vitro_, TRAP-stained osteoclasts.
 
 ## Tech Stack
 * **Frontend:** React + Vite + Tailwind CSS
@@ -47,4 +47,3 @@ Visit `http://localhost:5173` to view the dashboard!
 
 ### Downloadabe file
 Go to the lastest release on this Github repo and download the large .exe file. Opening this should allow the entire dashboard to run locally on your pc!
-
