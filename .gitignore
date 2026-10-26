@@ -15,3 +15,12 @@ dist/
 dist/
 build/
 *.spec
+
+# Keep the desktop packaging recipe in version control.
+!OCLAST.spec
+
+# Saved local microscopy projects
+data/
+
+# Windows executables are attached to GitHub Releases.
+*.exe

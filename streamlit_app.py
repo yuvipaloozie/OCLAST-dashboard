@@ -4,15 +4,15 @@ import numpy as np
 import pandas as pd
 import onnxruntime as ort
 
-from chana.config import IMG_SIZE, BATCH_SIZE
-from chana.data import pad_image, get_tile_coordinates
-from chana.preprocessor import preprocess_v9
-from chana.onnx_engine import get_model, predict_batch
-from chana.biology import extract_biology
+from oclast.config import IMG_SIZE, BATCH_SIZE
+from oclast.data import pad_image, get_tile_coordinates
+from oclast.preprocessor import preprocess_v9
+from oclast.onnx_engine import get_model, predict_batch
+from oclast.biology import extract_biology
 
-st.set_page_config(page_title="CHANA Dashboard", layout="wide")
+st.set_page_config(page_title="OCLAST Dashboard", layout="wide")
 
-st.title("CHANA Microscopy Analysis (Advanced Prototype)")
+st.title("OCLAST Microscopy Analysis (Advanced Prototype)")
 st.markdown("Upload a cellular microscopy image to extract advanced morphometrics and density heatmaps.")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["tif", "png", "jpg", "jpeg"])

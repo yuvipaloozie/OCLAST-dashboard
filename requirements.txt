@@ -1,9 +1,4 @@
-fastapi
-uvicorn
-python-multipart
-onnxruntime
-plotly
-opencv-python-headless
-scikit-image
-scipy
-pandas
+-r requirements-base.txt
+# Install one ONNX runtime variant, not overlapping CPU/GPU distributions.
+onnxruntime-directml==1.24.4; sys_platform == "win32"
+onnxruntime==1.28.0; sys_platform != "win32"

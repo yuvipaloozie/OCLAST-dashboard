@@ -3,7 +3,8 @@ const acorn = require('acorn');
 const jsx = require('acorn-jsx');
 
 const Parser = acorn.Parser.extend(jsx());
-const code = fs.readFileSync('d:/Personal Projects/CHANA_Dash/frontend/src/App.jsx', 'utf8');
+const path = require('path');
+const code = fs.readFileSync(path.join(__dirname, 'src', 'App.jsx'), 'utf8');
 
 try {
   Parser.parse(code, { sourceType: 'module', ecmaVersion: 2020 });

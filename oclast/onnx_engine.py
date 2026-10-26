@@ -8,7 +8,7 @@ _session_instance = None
 def get_model():
     global _session_instance
     if _session_instance is None:
-        model_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'chana_model.onnx'))
+        model_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'oclast_model.onnx'))
         print(f"Loading ONNX Runtime Session from {model_path}...")
         
         # Attempt GPU acceleration via DirectML, fallback to CPU

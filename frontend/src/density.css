@@ -1,0 +1,12 @@
+.distributions{grid-template-columns:minmax(0,1fr);gap:15px;padding:12px 15px 16px}
+.density-plot{margin:0;min-width:0}
+.density-plot figcaption{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:10px;color:#80718a;margin-bottom:7px}
+.density-plot figcaption small{font-size:8px;color:#a28cad;letter-spacing:.04em}
+.density-plot svg{display:block;width:100%;height:66px;overflow:visible}
+.density-grid{stroke:#eee7f2;stroke-width:1;vector-effect:non-scaling-stroke}
+.density-line{fill:none;stroke:#a57caf;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.density-axis{display:flex;justify-content:space-between;font-size:9px;color:#9b85a7;margin-top:4px;font-variant-numeric:tabular-nums}
+.density-empty{height:66px;display:grid;place-items:center;font-size:10px;color:#9b85a7}
+.density-plot .density-range{padding:3px 7px;border:1px solid #eee5f2;border-radius:20px;background:#faf7fc;font-size:9px;font-weight:400;color:#8d6b9a;line-height:1.2}
+.density-plot .density-range:hover{background:#f1e8f5;border-color:#d8c3e0}
+.density-caption{font-size:8px;color:#9b85a7;margin-top:5px}

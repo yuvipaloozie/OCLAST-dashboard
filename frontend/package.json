@@ -1,7 +1,7 @@
 {
-  "name": "frontend",
+  "name": "oclast-dashboard",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,8 @@
     "@tailwindcss/postcss": "^4.3.3",
     "acorn": "^8.18.0",
     "acorn-jsx": "^5.3.2",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "lucide-react": "^1.28.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
