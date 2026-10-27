@@ -35,6 +35,28 @@ An object spanning multiple tiles keeps one identity and is counted once. Tile c
 
 The current app focuses on **image-level analysis**. It does not require experiment, drug, dose, well-size, or biological-replicate metadata. Areas are reported in pixels²; physical calibration, well-region analysis, split/merge editing, and treatment comparisons are not part of this release.
 
+## Object exploration (development)
+
+Expand **Explore objects** in Measurements for descriptive analysis of the current
+image. Plot area, circularity, solidity, or eccentricity against one another;
+optional log scaling applies to area only, without changing the stored measurements.
+Click a point to inspect its mask in the main viewer. Ctrl/Shift-click adds or removes
+points; drag a rectangle or use **Range** to select exact measurement limits.
+Arrow keys browse plot points and Enter selects a focused point.
+
+Quick selections show the largest 10%, least circular 10%, or masks touching an
+image edge. The summary reports median area, median circularity, the middle 50%
+of areas, and the 10th–90th area percentiles for the current selection. These are
+within-image descriptive summaries, not confidence intervals or biological groups.
+
+The individual-cell gallery can be sorted by size, circularity, solidity,
+eccentricity, or ID. It highlights only that cell's mask; neighboring cells remain
+visible as image context. Clicking a crop locates the same cell in the main viewer.
+Thumbnail overlays can be toggled. Crops are rendered on demand and cached in
+memory, without saving additional image copies. Image-edge masks and extreme
+shapes are review cues; the app does not classify them as errors or cell subtypes.
+No experiment metadata, well size, or physical calibration is required.
+
 ## GPU acceleration with CPU fallback
 
 The Windows release includes **ONNX Runtime DirectML** and automatically uses a compatible GPU when available. No separate CUDA toolkit is required. If GPU initialization or execution fails, inference retries on CPU. The analysis-time card identifies GPU, CPU, or mixed execution for that saved run.
@@ -117,6 +139,7 @@ Install the development tools once with `.venv\Scripts\python.exe -m pip install
 .venv\Scripts\python.exe -m unittest discover -s tests -v
 cd frontend
 npm run lint
+npm test
 npm run build
 cd ..
 .venv\Scripts\python.exe -m pip install PyInstaller==6.21.0

@@ -10,6 +10,7 @@ import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from threading import Lock
+from functools import lru_cache
 
 import cv2
 import numpy as np
@@ -21,6 +22,7 @@ from pydantic import BaseModel, Field
 
 from oclast.analysis import infer_image, separate_whole_image, model_hash, compute_status
 from oclast.projects import Projects
+from oclast.thumbnails import object_thumbnail
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_DATA = Path(os.environ.get('LOCALAPPDATA',str(Path.home()))) / 'OCLAST' / 'projects' if getattr(sys,'frozen',False) else ROOT/'data'/'projects'
@@ -74,6 +76,26 @@ def get_project(project_id:str):
 @app.get('/api/projects/{project_id}/cells')
 def cells(project_id:str):
     return store.cells(project_id)
+
+
+@lru_cache(maxsize=128)
+def cached_object_thumbnail(project_id, revision, object_id, masks):
+    cell=next(c for c in store.cells(project_id) if c['id']==object_id)
+    return object_thumbnail(store.source(project_id),store.labels(project_id,revision),cell,masks)
+
+
+@app.get('/api/projects/{project_id}/objects/{object_id}/thumbnail')
+def thumbnail(project_id:str,object_id:int,revision:int,masks:bool=True):
+    with store.lock:
+        meta=store.get(project_id)
+        if meta['status']!='complete':
+            raise HTTPException(409,'Finish analysis before inspecting objects')
+        if revision!=meta['revision']:
+            raise HTTPException(409,'This object changed. Reopen the project to refresh its masks.')
+        if not any(c['id']==object_id for c in store.cells(project_id)):
+            raise HTTPException(404,'Object not found')
+        data=cached_object_thumbnail(project_id,revision,object_id,masks)
+    return Response(data,media_type='image/jpeg',headers={'Cache-Control':'private, max-age=3600'})
 
 
 class Rename(BaseModel):
