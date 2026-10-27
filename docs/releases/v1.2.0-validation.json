@@ -1,0 +1,53 @@
+{
+  "version": "1.2.0",
+  "object_explorer_frontend_and_individual_mask_thumbnails": "passed",
+  "full_image_gpu": {
+    "width": 8057,
+    "height": 7479,
+    "count": 858,
+    "elapsed_seconds": 33.47,
+    "compute": {
+      "status": "active",
+      "device": "gpu",
+      "active_provider": "DmlExecutionProvider",
+      "providers_used": [
+        "DmlExecutionProvider"
+      ],
+      "available_providers": [
+        "DmlExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "gpu_device_id": 0,
+      "preference": "auto",
+      "fallback_events": []
+    },
+    "model": {
+      "id": "unetpp_curriculum",
+      "file": "unetplusplus.onnx",
+      "sha256": "aa9da6f197ffc6b2cd294cefadc5d01a91c9d45e80163c65b171c90419ec71ee"
+    }
+  },
+  "frontend_fonts_csv_and_image_tiles": "passed",
+  "reopen_persists_labels_and_measurements": "passed",
+  "cpu_only_execution": {
+    "count": 10,
+    "elapsed_seconds": 3.67,
+    "compute": {
+      "status": "active",
+      "device": "cpu",
+      "active_provider": "CPUExecutionProvider",
+      "providers_used": [
+        "CPUExecutionProvider"
+      ],
+      "available_providers": [
+        "DmlExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "gpu_device_id": null,
+      "preference": "cpu",
+      "fallback_events": []
+    }
+  },
+  "exe_sha256": "675afe1bdfa5699274def97e890ab3aa6642903a40a54b3634942193f1a4fdf7",
+  "exe_bytes": 173809752
+}

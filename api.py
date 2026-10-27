@@ -29,7 +29,7 @@ DEFAULT_DATA = Path(os.environ.get('LOCALAPPDATA',str(Path.home()))) / 'OCLAST' 
 store = Projects(os.environ.get('OCLAST_DATA_DIR',str(DEFAULT_DATA)))
 workers = ThreadPoolExecutor(max_workers=1, thread_name_prefix='oclast-analysis')
 job_lock = Lock()
-app = FastAPI(title='OCLAST local analysis',version='1.1.0')
+app = FastAPI(title='OCLAST local analysis',version='1.2.0')
 app.add_middleware(CORSMiddleware,allow_origins=['http://127.0.0.1:5173','http://localhost:5173'],
                    allow_methods=['GET','POST','PATCH'],allow_headers=['Content-Type'])
 
@@ -285,7 +285,7 @@ if __name__=='__main__':
     port=int(os.environ.get('OCLAST_PORT','8000'))
     if not 1<=port<=65535:
         raise ValueError('OCLAST_PORT must be between 1 and 65535')
-    print(f'OCLAST 1.1.0 — http://127.0.0.1:{port}',flush=True)
+    print(f'OCLAST 1.2.0 — http://127.0.0.1:{port}',flush=True)
     print(f'Saved projects: {store.root.resolve()}',flush=True)
     print('Keep this window open while using OCLAST. Close it to stop the app.',flush=True)
     if not os.environ.get('OCLAST_NO_BROWSER'):
