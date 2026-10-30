@@ -1,28 +1,43 @@
-/** Local, dependency-light primitives following the 21st.dev/shadcn patterns.
- * References and adaptation notes: frontend/DESIGN.md.
- */
-export function Button({variant='outline',size='default',className='',type='button',...props}) {
-  return <button type={type} data-variant={variant} data-size={size} className={`ui-button ${className}`} {...props}/>;
+import {createContext,useContext} from 'react';
+import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
+import {Slot} from '@radix-ui/react-slot';
+import {cva} from 'class-variance-authority';
+import {clsx} from 'clsx';
+
+// Adapted from shadcn/ui and 21st.dev's shadcn Toggle Group (MIT).
+// OCLAST keeps its offline CSS tokens and existing public component API.
+const buttonVariants=cva('ui-button',{
+  variants:{variant:{outline:'',primary:'ui-button-primary',ghost:'ui-button-ghost'},size:{default:'',sm:'ui-button-sm',icon:'ui-button-icon'}},
+  defaultVariants:{variant:'outline',size:'default'},
+});
+
+export function Button({variant='outline',size='default',className,type='button',asChild=false,...props}) {
+  const Component=asChild?Slot:'button';
+  return <Component type={asChild?undefined:type} data-slot="button" data-variant={variant} data-size={size} className={clsx(buttonVariants({variant,size}),className)} {...props}/>;
 }
 
-export function Badge({children,status='neutral',className=''}) {
-  return <span className={`ui-badge ${className}`} data-status={status}><i aria-hidden="true"/>{children}</span>;
+export function Badge({children,status='neutral',className}) {
+  return <span className={clsx('ui-badge',className)} data-status={status}><i aria-hidden="true"/>{children}</span>;
 }
 
-/** Single-value segmented group, with native radio-group keyboard behavior. */
+const ToggleContext=createContext({size:'default'});
+export function ToggleGroup({className,size='default',children,...props}) {
+  return <ToggleGroupPrimitive.Root data-slot="toggle-group" className={clsx('ui-segmented',className)} {...props}>
+    <ToggleContext.Provider value={{size}}>{children}</ToggleContext.Provider>
+  </ToggleGroupPrimitive.Root>;
+}
+export function ToggleGroupItem({className,children,...props}) {
+  const {size}=useContext(ToggleContext);
+  return <ToggleGroupPrimitive.Item data-slot="toggle-group-item" data-size={size} className={clsx('ui-segment',className)} {...props}>{children}</ToggleGroupPrimitive.Item>;
+}
+
+/** Controlled single selection; re-clicking the active item keeps it selected. */
 export function SegmentedControl({value,onChange,options,label}) {
-  const enabled=options.filter(option=>!option.disabled);
-  const move=(event)=>{
-    let index=enabled.findIndex(option=>option.value===value);
-    if(event.key==='ArrowRight'||event.key==='ArrowDown')index=(index+1)%enabled.length;
-    else if(event.key==='ArrowLeft'||event.key==='ArrowUp')index=(index-1+enabled.length)%enabled.length;
-    else if(event.key==='Home')index=0;
-    else if(event.key==='End')index=enabled.length-1;
-    else return;
-    if(!enabled.length)return;
-    event.preventDefault();
-    const next=enabled[index];onChange(next.value);
-    event.currentTarget.querySelector(`[data-value="${next.value}"]`)?.focus();
-  };
-  return <div className="ui-segmented" role="radiogroup" aria-label={label} onKeyDown={move}>{options.map(option=><button type="button" key={option.value} role="radio" aria-checked={value===option.value} tabIndex={value===option.value?0:-1} data-value={option.value} disabled={option.disabled} onClick={()=>onChange(option.value)}>{option.icon}{option.label}</button>)}</div>;
+  return <ToggleGroup type="single" value={value} onValueChange={next=>{if(next)onChange(next);}} aria-label={label} loop onFocusCapture={event=>{
+    // Single-value display modes behave as radios: keyboard focus activates a mode.
+    const next=event.target.closest('[data-value]')?.dataset.value;
+    if(next&&next!==value)onChange(next);
+  }}>
+    {options.map(option=><ToggleGroupItem key={option.value} value={option.value} data-value={option.value} disabled={option.disabled}>{option.icon}<span>{option.label}</span></ToggleGroupItem>)}
+  </ToggleGroup>;
 }

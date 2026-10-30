@@ -21,7 +21,7 @@ export default function TileLibrary({project,cells,onNavigate}) {
     <div ref={grid} className="tile-library-grid" role="region" aria-label="Tile thumbnails" tabIndex={0}>
       {tiles.map(tile=>{
         const base=`/api/projects/${project.id}/tiles`;
-        return <button key={`${project.id}-${tile.index}`} className={`tile-card ${selected===tile.index?'selected':''}`} aria-label={`View tile ${tile.index+1}, y ${tile.y}, x ${tile.x}${complete?`, ${tile.count} object centers`:''}`} onClick={()=>{setSelected(tile.index);onNavigate(tile);}}>
+        return <button key={`${project.id}-${tile.index}`} className={`tile-card ${selected===tile.index?'selected':''}`} aria-pressed={selected===tile.index} aria-label={`View tile ${tile.index+1}, y ${tile.y}, x ${tile.x}${complete?`, ${tile.count} object centers`:''}`} onClick={()=>{setSelected(tile.index);onNavigate(tile);}}>
           <div className="tile-thumbnail"><img loading="lazy" alt={`Original tile ${tile.index+1}`} src={`${base}/raw/0/${tile.column}/${tile.row}`}/>{masks&&complete&&<img loading="lazy" className="tile-mask-thumbnail" alt="" src={`${base}/labels/0/${tile.column}/${tile.row}?revision=${project.revision}`}/>}<span className="tile-number">{String(tile.index+1).padStart(3,'0')}</span></div>
           <div className="tile-caption"><strong>Tile {tile.index+1}</strong><small>y{tile.y} · x{tile.x}</small><span>{complete?`${tile.count} object ${tile.count===1?'center':'centers'}`:`${tile.width} × ${tile.height} px`}</span></div>
         </button>;

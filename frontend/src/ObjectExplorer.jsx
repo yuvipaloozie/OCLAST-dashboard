@@ -1,6 +1,6 @@
 import {useEffect,useId,useMemo,useRef,useState} from 'react';
 import {ChevronDown,Eye,EyeOff,SlidersHorizontal} from 'lucide-react';
-import {Button} from './components/ui';
+import {Button,SegmentedControl} from './components/ui';
 import {axisFor,describe,fields,inRange,presetIds} from './objectInsights';
 import './object-explorer.css';
 
@@ -70,6 +70,7 @@ function ObjectGallery({project,cells,selected,onInspect}) {
 }
 
 export default function ObjectExplorer({project,cells,selected,onInspect,expanded,onExpandedChange}) {
+  const [view,setView]=useState('gallery');
   const [xField,setXField]=useState('area'),[yField,setYField]=useState('circularity'),[logArea,setLogArea]=useState(false);
   const [selection,setSelection]=useState(null),[selectionLabel,setSelectionLabel]=useState('All objects'),[rangeOpen,setRangeOpen]=useState(false),[range,setRange]=useState({x0:'',x1:'',y0:'',y1:''}),[rangeError,setRangeError]=useState('');
   const xId=useId(),yId=useId();
@@ -87,15 +88,16 @@ export default function ObjectExplorer({project,cells,selected,onInspect,expande
   return <section className={`object-explorer ${expanded?'expanded':''}`} aria-label="Explore objects">
     <button className="explorer-toggle" aria-expanded={expanded} onClick={()=>onExpandedChange(!expanded)}><span>Explore objects <small>{cells.length.toLocaleString()}</small></span><ChevronDown size={15}/></button>
     {expanded&&<div className="explorer-content">
-      <div className="object-axis-controls"><label htmlFor={xId}>Plot X<select id={xId} value={xField} onChange={e=>setAxis('x',e.target.value)}>{Object.entries(fields).map(([key,field])=><option key={key} value={key} disabled={key===yField}>{field.label}</option>)}</select></label><label htmlFor={yId}>Plot Y<select id={yId} value={yField} onChange={e=>setAxis('y',e.target.value)}>{Object.entries(fields).map(([key,field])=><option key={key} value={key} disabled={key===xField}>{field.label}</option>)}</select></label></div>
+      <div className="explorer-view-controls"><SegmentedControl value={view} onChange={setView} label="Object explorer view" options={[{value:'gallery',label:'Cells'},{value:'plot',label:'Plot'}]}/><span>{subset.length.toLocaleString()} / {cells.length.toLocaleString()}</span></div>
+      <label className="object-scope">Show<select aria-label="Object selection" value={selection===null?'all':({'Largest 10%':'largest','Least circular 10%':'least-round','Image edges':'edge'}[selectionLabel]||'custom')} onChange={e=>{const key=e.target.value;setSelection(presetIds(cells,key,project.width,project.height));setSelectionLabel({'all':'All objects','largest':'Largest 10%','least-round':'Least circular 10%','edge':'Image edges'}[key]);setRangeError('');onInspect(null);}}><option value="all">All objects</option><option value="largest">Largest 10%</option><option value="least-round">Least circular 10%</option><option value="edge">Image edges</option>{selection!==null&&!['Largest 10%','Least circular 10%','Image edges'].includes(selectionLabel)&&<option value="custom">{selectionLabel}</option>}</select></label>
+      <section className="object-statistics" aria-label="Selection statistics">      <dl className="object-summary"><div><dt>Median area</dt><dd>{number(stats.medianArea)} <small>px²</small></dd></div><div><dt>Median circularity</dt><dd>{number(stats.medianCircularity,3)}</dd></div><div><dt>Area middle 50%</dt><dd>{interval(stats.q1,stats.q3)}</dd></div><div><dt>Area 10–90%</dt><dd>{interval(stats.p10,stats.p90)}</dd></div></dl>
+</section>
+      {view==='plot'?<div className="explorer-plot-content">      <div className="object-axis-controls"><label htmlFor={xId}>Plot X<select id={xId} value={xField} onChange={e=>setAxis('x',e.target.value)}>{Object.entries(fields).map(([key,field])=><option key={key} value={key} disabled={key===yField}>{field.label}</option>)}</select></label><label htmlFor={yId}>Plot Y<select id={yId} value={yField} onChange={e=>setAxis('y',e.target.value)}>{Object.entries(fields).map(([key,field])=><option key={key} value={key} disabled={key===xField}>{field.label}</option>)}</select></label></div>
       <div className="object-plot-tools"><label><input type="checkbox" checked={logArea} onChange={e=>setLogArea(e.target.checked)} disabled={xField!=='area'&&yField!=='area'}/>Log area</label><Button aria-expanded={rangeOpen} onClick={()=>setRangeOpen(v=>!v)}><SlidersHorizontal size={12}/>Range</Button></div>
       <ShapePlot cells={cells} selected={selected} selection={selection} onSelect={selectPoint} onRange={selectRange} xField={xField} yField={yField} logArea={logArea}/>
       {rangeOpen&&<form className="object-range-form" onSubmit={applyRange}><div>{[['x0','X minimum'],['x1','X maximum'],['y0','Y minimum'],['y1','Y maximum']].map(([key,label])=><label key={key}>{label}<input type="number" step="any" placeholder="Any" value={range[key]} onChange={e=>setRange(r=>({...r,[key]:e.target.value}))}/></label>)}</div><Button type="submit">Select range</Button>{rangeError&&<p role="alert">{rangeError}</p>}</form>}
-      <div className="object-presets">{[['all','All'],['largest','Largest 10%'],['least-round','Least circular 10%'],['edge','Image edges']].map(([key,label])=><Button key={key} aria-pressed={key==='all'?selection===null:selectionLabel===label} onClick={()=>{setSelection(presetIds(cells,key,project.width,project.height));setSelectionLabel(key==='all'?'All objects':label);setRangeError('');onInspect(null);}}>{label}</Button>)}</div>
-      <div className="object-selection-heading"><strong>{selectionLabel}</strong><span>{subset.length.toLocaleString()} / {cells.length.toLocaleString()}</span></div>
-      <dl className="object-summary"><div><dt>Median area</dt><dd>{number(stats.medianArea)} <small>px²</small></dd></div><div><dt>Median circularity</dt><dd>{number(stats.medianCircularity,3)}</dd></div><div><dt>Middle 50% of areas</dt><dd>{interval(stats.q1,stats.q3)}</dd></div><div><dt>10th–90th percentile</dt><dd>{interval(stats.p10,stats.p90)}</dd></div></dl>
-      <ObjectGallery project={project} cells={subset} selected={selected} onInspect={onInspect}/>
-      <p className="object-explorer-note">Shapes describe masks. Extreme values and edge contact are review cues, not biological classifications. Ctrl/Shift-click adds or removes plot points.</p>
+</div>:<ObjectGallery project={project} cells={subset} selected={selected} onInspect={onInspect}/>}
+
     </div>}
   </section>;
 }
