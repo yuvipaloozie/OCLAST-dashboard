@@ -13,7 +13,7 @@ Built for TRAP-stained bright-field images, OCLAST bundles its U-Net++ model, in
 
 [**Download for Windows**](https://github.com/yuvipaloozie/OCLAST-dashboard/releases/latest) · [Paper & research code](https://github.com/yuvipaloozie/OCLAST) · [Report an issue](https://github.com/yuvipaloozie/OCLAST-dashboard/issues)
 
-![OCLAST: whole-image masks, saved projects, and morphology distributions](docs/images/interface.png)
+![OCLAST: whole-image masks, saved projects, and morphology distributions](docs/images/interface.jpg)
 
 ## Start analyzing
 
@@ -41,7 +41,7 @@ Objects spanning multiple tiles keep one global identity and are counted once. T
 
 ### Explore objects
 
-Expand **Explore objects** in Measurements to plot area, circularity, solidity, or eccentricity. Optional log scaling spreads broad area distributions without changing stored values.
+Expand **Explore objects** in Measurements to browse cell crops and inline selection statistics. Switch to **Plot** for area, circularity, solidity, or eccentricity; optional log scaling preserves stored values.
 
 - Click a point to locate its mask. Ctrl/Shift-click adjusts the selection; drag a box or use **Range** for numeric limits.
 - Select the largest 10%, least circular 10%, or image-edge masks for review.
@@ -59,7 +59,7 @@ Expand **Explore objects** in Measurements to plot area, circularity, solidity, 
 
 The Windows release uses **ONNX Runtime DirectML** on compatible GPUs, with automatic CPU retry if GPU execution fails. A separate CUDA toolkit is not required. Each saved run records GPU, CPU, or mixed execution. Preprocessing, object separation, and saving remain CPU tasks.
 
-One packaged-app test processed an **8,057 × 7,479-pixel** image in **33.47 seconds** on an RTX 3060 Ti, excluding import. Timings vary by hardware and image; release validation records are in [docs/releases](docs/releases).
+One packaged-app test processed an **8,057 × 7,479-pixel** image in **32.11 seconds** on an RTX 3060 Ti, excluding import. Timings vary by hardware and image; release validation records are in [docs/releases](docs/releases).
 
 All analysis runs locally; images are not uploaded to a hosted service. Fonts and interface assets are bundled for offline use.
 
