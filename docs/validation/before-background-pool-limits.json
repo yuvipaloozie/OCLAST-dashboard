@@ -1,0 +1,23 @@
+{
+  "status": "failed",
+  "exe_sha256": "a02685734cb2d0f79c6fb134ce493cc325462037bab1c048e0583ceb6c13cb04",
+  "scenarios": [
+    {
+      "scenario": "forced_termination_during_cpu_inference",
+      "result": "passed",
+      "completed_tiles_before_kill": 1,
+      "reopened_status": "interrupted",
+      "rerun_status": "complete",
+      "count": 28,
+      "elapsed_seconds": 39.6,
+      "peak_process_commit_bytes": 3822653440
+    }
+  ],
+  "limits": {
+    "cpu_threads": 2,
+    "logical_cpus": 2,
+    "normal_commit_gib": 4,
+    "low_memory_commit_gib": 1
+  },
+  "error": "RuntimeError('Native process exited during one-gib-limit startup; see log')"
+}

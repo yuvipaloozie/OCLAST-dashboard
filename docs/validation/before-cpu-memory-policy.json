@@ -1,0 +1,52 @@
+{
+  "status": "failed",
+  "exe_sha256": "0706ad47d7cfcebca9941e85564c5ff002cb1665e8234e9b1f3329bebc2b0a80",
+  "image_name": "700cell_Rank75_Itaconate-VC_B10.tif",
+  "image_sha256": "b4a871a75a608cc3383af968f1d64ba0d4c05c50418e24c9986de69aa4e494cd",
+  "runs": [],
+  "limitations": [
+    "CPU affinity and process commit limits emulate constraints, not a particular laptop CPU or total system RAM."
+  ],
+  "constraints": {
+    "enforced": true,
+    "logical_cpus": 2,
+    "affinity_mask": 3,
+    "per_process_commit_limit_bytes": 4294967296,
+    "scope": "JobObject inherited by frozen child process; not a whole-machine RAM simulation"
+  },
+  "startup_memory": [
+    {
+      "tree_working_bytes": 138309632,
+      "tree_private_bytes": 1103872000,
+      "largest_process_peak_commit_bytes": 1101230080,
+      "processes": [
+        {
+          "pid": 2608,
+          "working_bytes": 121671680,
+          "private_bytes": 1101230080,
+          "affinity_mask": 3
+        },
+        {
+          "pid": 28580,
+          "working_bytes": 8663040,
+          "private_bytes": 1437696,
+          "affinity_mask": 3
+        },
+        {
+          "pid": 40548,
+          "working_bytes": 7974912,
+          "private_bytes": 1204224,
+          "affinity_mask": 3
+        }
+      ]
+    }
+  ],
+  "duplicate_during_inference": "passed",
+  "error": "RuntimeError({'schema_version': 1, 'id': '6ccf8706-f9d8-4021-a10b-2dabdfd1b510', 'name': '700cell_Rank75_Itaconate-VC_B10.tif', 'width': 8057, 'height': 7479, 'created_at': '2026-11-02T22:16:18.415532+00:00', 'updated_at': '2026-11-02T22:40:29.099194+00:00', 'source_sha256': 'b4a871a75a608cc3383af968f1d64ba0d4c05c50418e24c9986de69aa4e494cd', 'status': 'error', 'stage': 'Analysis failed', 'completed_tiles': 240, 'total_tiles': 240, 'progress': 88, 'revision': 0, 'count': 0, 'mean_area': 0, 'mean_circularity': 0, 'manual_ids': [], 'edit_count': 0, 'settings': {'threshold': 0.5, 'min_area_px': 50, 'min_peak_distance_px': 20, 'preprocessing': 'V9', 'tile_size': 512}, 'error': 'Unable to allocate 57.5 MiB for an array with shape (7479, 8057) and data type int8', 'started_at': 1793657779.4475718, 'elapsed_seconds': 1450.6, 'compute': {'status': 'active', 'device': 'cpu', 'active_provider': 'CPUExecutionProvider', 'providers_used': ['CPUExecutionProvider'], 'available_providers': ['DmlExecutionProvider', 'CPUExecutionProvider'], 'gpu_device_id': None, 'preference': 'cpu', 'cpu_threads': 2, 'fallback_events': []}, 'can_undo': False, 'storage_bytes': 89763271})",
+  "memory": {
+    "tree_working_bytes": 2622787584,
+    "tree_private_bytes": 4272300032,
+    "largest_process_peak_commit_bytes": 4269740032,
+    "sample_count": 2784
+  }
+}

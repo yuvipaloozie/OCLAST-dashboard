@@ -1,5 +1,6 @@
 """Local, lossless, versioned projects. Nothing is uploaded to a hosted service."""
 import json
+import logging
 import os
 import threading
 import uuid
@@ -15,10 +16,20 @@ def now():
     return datetime.now(timezone.utc).isoformat()
 
 
+def remove_temporary(path):
+    try:
+        path.unlink(missing_ok=True)
+    except OSError:
+        logging.getLogger(__name__).warning('Could not remove temporary file %s', path, exc_info=True)
+
+
 def write_json(path, value):
     temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps(value, allow_nan=False), encoding='utf-8')
-    os.replace(temporary, path)
+    try:
+        temporary.write_text(json.dumps(value, allow_nan=False), encoding='utf-8')
+        os.replace(temporary, path)
+    finally:
+        remove_temporary(temporary)
 
 
 class Projects:
@@ -26,6 +37,7 @@ class Projects:
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
         self.lock = threading.RLock()
+        self._errors = {}
         # A process restart must not leave old jobs pretending to be live.
         for path in self.root.glob('*/project.json'):
             try:
@@ -54,6 +66,7 @@ class Projects:
                 state = self.label_state(folder)
                 if state:
                     meta.update({k:state[k] for k in ('revision','manual_ids','edit_count','count','mean_area','mean_circularity','updated_at')})
+            meta.update(self._errors.get(project_id, {}))
             return meta
 
     @staticmethod
@@ -69,7 +82,20 @@ class Projects:
             meta = self.get(project_id)
             meta.update(changes, updated_at=now())
             write_json(self.folder(project_id)/'project.json', meta)
+            self._errors.pop(project_id, None)
             return meta
+
+    def mark_error(self, project_id, message, elapsed):
+        """Keep failed jobs retryable even when a full disk prevents status writes."""
+        with self.lock:
+            changes = dict(status='error',stage='Analysis failed',error=message,
+                           elapsed_seconds=elapsed,updated_at=now())
+            try:
+                return self.update(project_id, **changes)
+            except OSError:
+                logging.getLogger(__name__).exception('Could not persist failure status for %s', project_id)
+                self._errors[project_id] = changes
+                return changes
 
     def list(self):
         result = []
@@ -85,8 +111,15 @@ class Projects:
         folder = self.root / identifier
         folder.mkdir()
         # One lossless pixel master, not the uploaded TIFF plus a decoded copy.
-        if not cv2.imwrite(str(folder/'source.png'), image, [cv2.IMWRITE_PNG_COMPRESSION,3]):
-            raise OSError('Could not save the source image')
+        try:
+            if not cv2.imwrite(str(folder/'source.png'), image, [cv2.IMWRITE_PNG_COMPRESSION,3]):
+                raise OSError('Could not save the source image')
+        except Exception:
+            # This directory was created above for this import only; leave no
+            # unlisted partial source after a disk-full or encoder failure.
+            (folder/'source.png').unlink(missing_ok=True)
+            folder.rmdir()
+            raise
         meta = dict(schema_version=1,id=identifier,name=Path(filename).name,
                     width=image.shape[1],height=image.shape[0],created_at=now(),updated_at=now(),
                     source_sha256=source_hash,status='ready',stage='Ready to analyze',
@@ -94,7 +127,13 @@ class Projects:
                     count=0,mean_area=0,mean_circularity=0,manual_ids=[],edit_count=0,
                     settings=dict(threshold=.5,min_area_px=50,min_peak_distance_px=20,
                                   preprocessing='V9',tile_size=512),error=None)
-        write_json(folder/'project.json',meta)
+        try:
+            write_json(folder/'project.json',meta)
+        except Exception:
+            (folder/'project.tmp').unlink(missing_ok=True)
+            (folder/'source.png').unlink(missing_ok=True)
+            folder.rmdir()
+            raise
         return meta
 
     @lru_cache(maxsize=1)
@@ -125,7 +164,12 @@ class Projects:
 
     def save_analysis(self, project_id, probability, labels, model_hash, elapsed):
         folder = self.folder(project_id)
-        np.savez_compressed(folder/'probability.npz', probability=probability)
+        temporary=folder/'probability.next.npz'
+        try:
+            np.savez_compressed(temporary, probability=probability)
+            os.replace(temporary,folder/'probability.npz')
+        finally:
+            remove_temporary(temporary)
         self.probability.cache_clear()
         self.save_labels(project_id, labels, [], first=True)
         return self.update(project_id,status='complete',stage='Analysis complete',progress=100,
@@ -143,8 +187,11 @@ class Projects:
             # Geometry, measurements and review identity commit together. If the
             # app closes before the separate project index is updated, reopening
             # reads this authoritative state instead of stale summary values.
-            np.savez_compressed(temporary, labels=labels,state=np.array(json.dumps(state)))
-            os.replace(temporary,folder/'labels.npz')
+            try:
+                np.savez_compressed(temporary, labels=labels,state=np.array(json.dumps(state)))
+                os.replace(temporary,folder/'labels.npz')
+            finally:
+                remove_temporary(temporary)
             write_json(folder/'measurements.json', rows)
             self.labels.cache_clear()
             return self.update(project_id,**{k:v for k,v in state.items() if k not in ('cells','updated_at')})
@@ -184,8 +231,12 @@ class Projects:
             # One undo slot, compressed; it does not accumulate a full-image history.
             if (folder/'labels.npz').exists():
                 import shutil
-                shutil.copyfile(folder/'labels.npz',folder/'undo.npz')
-                write_json(folder/'undo.json',dict(manual_ids=meta['manual_ids']))
+                temporary = folder/'undo.next.npz'
+                try:
+                    shutil.copyfile(folder/'labels.npz',temporary)
+                    os.replace(temporary,folder/'undo.npz')
+                finally:
+                    remove_temporary(temporary)
             return self.save_labels(project_id,labels,manual_ids)
 
     def undo(self, project_id):
@@ -195,8 +246,9 @@ class Projects:
                 raise ValueError('There is no edit to undo')
             with np.load(folder/'undo.npz',allow_pickle=False) as data:
                 labels = data['labels']
-            manual = json.loads((folder/'undo.json').read_text(encoding='utf-8'))['manual_ids']
+                state = json.loads(data['state'].item()) if 'state' in data.files else None
+            manual = state['manual_ids'] if state else json.loads((folder/'undo.json').read_text(encoding='utf-8'))['manual_ids']
             meta = self.save_labels(project_id,labels,manual)
             (folder/'undo.npz').unlink()
-            (folder/'undo.json').unlink()
+            (folder/'undo.json').unlink(missing_ok=True)
             return meta

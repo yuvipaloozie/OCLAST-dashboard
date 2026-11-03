@@ -13,6 +13,7 @@ from skimage.segmentation import watershed
 
 from .preprocessor import preprocess_v9
 from .runtime import InferenceEngine
+from .resources import require_memory
 
 MODEL_PATH = Path(__file__).resolve().parent.parent / 'Model Weights' / 'unetplusplus.onnx'
 
@@ -47,6 +48,8 @@ def infer_image(image, progress=lambda *args: None, predictor=None):
     This pass deliberately retains non-overlapping inference tiles. Objects are
     separated once after stitching, rather than counted once per inference tile.
     """
+    if image.ndim != 3 or image.shape[2] != 3 or image.dtype != np.uint8 or not all(image.shape[:2]):
+        raise ValueError('Analysis requires a nonempty 8-bit RGB image.')
     height, width = image.shape[:2]
     probability = np.empty((height, width), dtype=np.float32)
     positions = tile_positions(height, width)
@@ -56,7 +59,7 @@ def infer_image(image, progress=lambda *args: None, predictor=None):
         h, w = patch.shape[:2]
         patch = cv2.copyMakeBorder(patch, 0, 512-h, 0, 512-w,
                                    cv2.BORDER_CONSTANT, value=(255,255,255))
-        batch = preprocess_v9(patch)[None].astype(np.float32)
+        batch = preprocess_v9(patch)[None].astype(np.float32, copy=False)
         if predictor:
             output = predictor(batch)
         else:
@@ -79,13 +82,23 @@ def separate_whole_image(probability, min_area=50, min_distance=20):
     """
     foreground = ndi.binary_fill_holes(probability > .5)
     components, _ = ndi.label(foreground)
-    sizes = np.bincount(components.ravel())
+    # Counting all int32 labels with bincount silently creates an int64 image
+    # copy (~460 MiB for a 60 MP field). Count only bounded component masks.
+    del foreground
     labels = np.zeros(probability.shape, dtype=np.uint32)
     next_id = 1
     for component_id, box in enumerate(ndi.find_objects(components), start=1):
-        if box is None or sizes[component_id] <= min_area:
+        if box is None or math.prod(part.stop-part.start for part in box) <= min_area:
             continue
         region = components[box] == component_id
+        if np.count_nonzero(region) <= min_area:
+            continue
+        padded_pixels = (region.shape[0]+2)*(region.shape[1]+2)
+        if padded_pixels >= 1024*1024:
+            # Dense masks can have a whole-image component. EDT, peak finding,
+            # and watershed need substantially more than the final uint32 map.
+            # Fail recoverably before allocating those full-resolution arrays.
+            require_memory(padded_pixels*48, 'separate this connected region')
         padded = np.pad(region, 1)
         distance = ndi.distance_transform_edt(padded)
         peaks = peak_local_max(distance, min_distance=min_distance,
@@ -102,6 +115,9 @@ def separate_whole_image(probability, min_area=50, min_distance=20):
                 continue
             target[obj.slice][obj.image] = next_id
             next_id += 1
+        # Do not keep the previous component's distance/label buffers alive
+        # while allocating the next one (RegionProperties also retains local).
+        del obj, distance, padded, peaks, markers, local, region, target
     return labels
 
 

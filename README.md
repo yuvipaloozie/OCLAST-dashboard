@@ -18,8 +18,8 @@ Built for TRAP-stained bright-field images, OCLAST bundles its U-Net++ model, in
 ## Start analyzing
 
 1. Download **OCLAST.exe** from the [latest release](https://github.com/yuvipaloozie/OCLAST-dashboard/releases/latest), rather than the Source code archives.
-2. Close any previous OCLAST instance, then double-click the executable. After unpacking, it opens your browser at `http://127.0.0.1:8000`.
-3. Choose **Open image**, then **Analyze image**. Review the saved masks and export your results.
+2. Close any previous OCLAST instance, then double-click the executable. After unpacking, it opens your browser at `http://127.0.0.1:8000` or an available local port shown in the console.
+3. Choose **Open image**, then **Analyze image**. Review the saved masks and export your results. Use a single 8-bit RGB image, up to 64 megapixels and 512 MB.
 
 Keep the OCLAST console window open while working. Close it to stop the app; closing the browser tab alone does not stop the service. The executable is unsigned, so Windows may show an unrecognized-publisher notice.
 
@@ -57,7 +57,7 @@ Expand **Explore objects** in Measurements to browse cell crops and inline selec
 
 ## GPU, storage, and exports
 
-The Windows release uses **ONNX Runtime DirectML** on compatible GPUs, with automatic CPU retry if GPU execution fails. A separate CUDA toolkit is not required. Each saved run records GPU, CPU, or mixed execution. Preprocessing, object separation, and saving remain CPU tasks.
+The Windows release uses **ONNX Runtime DirectML** on compatible GPUs, with automatic CPU retry if GPU execution fails. A separate CUDA toolkit is not required. Each saved run records GPU, CPU, or mixed execution. Preprocessing, object separation, and saving remain CPU tasks. CPU-only operation is supported; see [laptop reliability notes](docs/CPU_HARDENING.md) for validation and image limits.
 
 One packaged-app test processed an **8,057 × 7,479-pixel** image in **32.11 seconds** on an RTX 3060 Ti, excluding import. Timings vary by hardware and image; release validation records are in [docs/releases](docs/releases).
 

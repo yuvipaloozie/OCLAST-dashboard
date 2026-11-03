@@ -1,0 +1,42 @@
+{
+  "tested_date": "2026-11-02",
+  "exe_sha256": "82ac9c9135e8a22a43e4b9664daa62aa17c1ae945ab749667fa3d2d937e6c3bf",
+  "exe_bytes": 173853565,
+  "machine": {
+    "os": "Windows 11 10.0.26200",
+    "cpu": "Intel Core i7-10700 2.90GHz",
+    "physical_cores": 8,
+    "logical_cpus": 16,
+    "installed_ram_bytes": 34089435136
+  },
+  "python_regression_tests_passed": 59,
+  "frontend_tests_passed": 5,
+  "frontend_lint": "passed",
+  "frontend_build": "passed",
+  "limitations": [
+    "CPU affinity and per-process commit limits do not emulate a whole 8GB laptop.",
+    "Concurrent stress work affected timings; not an idle performance comparison.",
+    "Test on one actual lab laptop before broad distribution."
+  ],
+  "source_sha256": {
+    "api.py": "35dfcf192fc963bd0181288ea1a3a1460c19074872153fa8aad90369498b7032",
+    "OCLAST.spec": "f30a93597b656c4ddb45947cefb0cf757414f47fb4a5aa40b4a02aeaf2b00ee1",
+    "requirements-base.txt": "2d8f1aa9f58302ba8e734e44e11f574a47457ba74980cc1d6efc899972011211",
+    "packaging/desktop.py": "f7eb86487fbade9bf6c1d7b7ee4e50a4d75bcad5b4deec2e5da7b5c302f46e46",
+    "packaging/windows-version.txt": "5fce6074d7315346f7d0ba07dc5f25eab55b2687f329ab697159de1d23df769d",
+    "oclast/__init__.py": "a5a65fc417d4772696e5d2673682d8c91956762c27e142b046d0f8ecd77a1aed",
+    "oclast/analysis.py": "d971fffcb214ff45f378392593d00b311addbec115efa1154b75ea4343ea8d4b",
+    "oclast/biology.py": "337a7a836138039537811fbab4511f6e3e422fd81abf9316844de865fe1f3cad",
+    "oclast/config.py": "77ea66a991b55000e249cd748cf9b237a10780e52c2ed4ee51a33aeec17fc189",
+    "oclast/data.py": "7596dc75a0ace054ac30b3a94494796050d5e15bddf4ec0f6ac42179ff0d28fd",
+    "oclast/launcher.py": "3aa2764e3b3b85574281c5f3243870c451da109a4f4c6921bbd9304d8e878525",
+    "oclast/onnx_engine.py": "8b40fdb7b4be82ef323ed2e5d51a681d724e1de2a7aec5e017460d5ae0adbe2e",
+    "oclast/preprocessor.py": "ff26b0a783bcb57bdc7e14dc0c33a73eb68a65ffb500d07264317c8d8f090aab",
+    "oclast/projects.py": "0c5480c494e25f5cee1eb7c30dde84b7d91325d63fd3e79394ecd7144e44c9fb",
+    "oclast/resources.py": "32524325a5af70505edef71101cacfb8925d8784e1e1d306f386e7af61cf30e6",
+    "oclast/runtime.py": "6ac89d128b3be4bff0a13fdb3806bc08d01e1a869bcf464806357f0d396eeaaf",
+    "oclast/thumbnails.py": "a4ddbe294592d2b53ee12fa16e1ac80659c824cb9e082db36d57b6f8069edd89"
+  },
+  "version": "1.3.1",
+  "release_tag": "v1.3.1"
+}

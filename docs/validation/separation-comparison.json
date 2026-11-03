@@ -1,0 +1,32 @@
+{
+  "measurement": "Separate child processes; Windows GetProcessMemoryInfo PeakWorkingSetSize includes imports/input/decode; no inference; one run per case. Label hashes exactly equal old/new.",
+  "results": [
+    {
+      "case": "cached full probability 8057x7479",
+      "old_seconds": 3.161,
+      "new_seconds": 3.122,
+      "old_peak_rss_mib": 1067.1,
+      "new_peak_rss_mib": 780.8,
+      "count": 858,
+      "labels_sha256": "db2dbadace4a7b7cf14695605db3b47a2a96a9d0d7ece72f0aecf33e83424dc4"
+    },
+    {
+      "case": "dense 2048x2048",
+      "old_seconds": 1.139,
+      "new_seconds": 1.068,
+      "old_peak_rss_mib": 272.7,
+      "new_peak_rss_mib": 272.9,
+      "count": 1,
+      "labels_sha256": "5dc03470a12e6f5cf8cae0480f58c5dbeaecd4324992bf3784ee8204c914414f"
+    },
+    {
+      "case": "466489 isolated foreground pixels 2048x2048",
+      "old_seconds": 0.408,
+      "new_seconds": 0.598,
+      "old_peak_rss_mib": 281.9,
+      "new_peak_rss_mib": 274.6,
+      "count": 0,
+      "labels_sha256": "080acf35a507ac9849cfcba47dc2ad83e01b75663a516279c8b9d243b719643e"
+    }
+  ]
+}
