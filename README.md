@@ -58,7 +58,7 @@ Expand **Explore objects** in Measurements to browse cell crops and inline selec
 
 ## GPU, storage, and exports
 
-The Windows release uses **ONNX Runtime DirectML** on compatible GPUs, with automatic CPU retry if GPU execution fails. A separate CUDA toolkit is not required. Each saved run records GPU, CPU, or mixed execution. Preprocessing, object separation, and saving remain CPU tasks. CPU-only operation is supported; see [laptop reliability notes](docs/CPU_HARDENING.md) for validation and image limits.
+The Windows release uses **ONNX Runtime DirectML** on compatible GPUs, with automatic CPU retry if GPU execution fails. A separate CUDA toolkit is not required. Each saved run records GPU, CPU, or mixed execution. Preprocessing, object separation, and saving remain CPU tasks. Large scans can take several minutes on CPU. See [laptop reliability notes](docs/CPU_HARDENING.md) for validation and image limits.
 
 One packaged-app test processed an **8,057 × 7,479-pixel** image in **32.11 seconds** on an RTX 3060 Ti, excluding import. Timings vary by hardware and image; release validation records are in [docs/releases](docs/releases).
 

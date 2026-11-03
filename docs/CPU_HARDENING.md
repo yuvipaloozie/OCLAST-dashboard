@@ -127,3 +127,9 @@ need memory admission checks. FP16 is not assumed to improve ordinary CPU use.
 - A one-file executable extracts bundled libraries to temporary storage on each
   launch. Slow first startup or antivirus scanning can still occur. Signing or
   a conventional installer can be evaluated after the lab pilot.
+
+## v1.4.0 packaged batch validation
+
+The v1.4.0 executable repeats the full-image CPU test under four logical CPUs/threads and a 4 GiB per-process commit ceiling. The full 8,057 × 7,479 image produced 858 objects in 696.97 seconds. Exports, repeated crops, duplicate startup, and restart preservation passed. A separate actual-EXE test runs a three-image queue under two logical CPUs: duplicate imports reuse saved projects, a paused queue survives restart, and all-object CSV retains every detection.
+
+See [the v1.4.0 validation manifest](releases/v1.4.0-validation.json) for executable SHA256, memory, latency, scope, and recorded results. The model and segmentation definitions are unchanged.
