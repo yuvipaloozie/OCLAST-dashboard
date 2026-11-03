@@ -15,7 +15,7 @@ Preserve the user's rounded dashboard references: Outfit geometric circular type
 - Center: active image, saved/undo/export controls, four compact image summaries, display-layer pills, viewer.
 - Right: Measurements/Tiles pills. Selected cell area and circularity appear first, using the same pink/sand cards. No position or detection-origin prose.
 - Measurements: compact KDEs with explicit focused/full range and outside-view count; searchable measurement table with scoped sticky headers.
-- Explore objects: cell gallery first, optional Plot view, shared selection presets. Statistics and explanatory copy use disclosures. Keep actual thumbnails and mask toggles accessible without traversing plot controls.
+- Explore objects: cell gallery first, optional Plot view, shared selection presets. Selection statistics remain inline; optional explanatory copy uses disclosures. Keep actual thumbnails and mask toggles accessible without traversing plot controls.
 - Tiles: continuous vertical library, lazy images, original and mask overlay; pressed state is programmatically exposed.
 - Exports are grouped next to the active image, not buried beneath inspector charts.
 

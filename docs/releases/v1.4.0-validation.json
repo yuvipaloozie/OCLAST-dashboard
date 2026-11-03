@@ -1,0 +1,392 @@
+{
+  "version": "1.4.0",
+  "executable": {
+    "filename": "OCLAST.exe",
+    "bytes": 173871148,
+    "sha256": "8717e4493689c564964b6b78424426428c14b6b6d445bdacb6d35983fdd2c28c"
+  },
+  "automated_checks": {
+    "backend_tests_passed": 76,
+    "frontend_tests_passed": 10,
+    "frontend_lint": "passed",
+    "production_frontend_build": "passed",
+    "simulated_queue_jobs": 50,
+    "simulated_failure_continuation_and_retry": "passed"
+  },
+  "full_image_gpu_source_workflow": {
+    "image_count": 5,
+    "total_analysis_seconds": 163.73,
+    "exported_object_rows": 3860,
+    "runs": [
+      {
+        "width": 8056,
+        "height": 7480,
+        "count": 1075,
+        "elapsed_seconds": 33.03,
+        "compute": {
+          "status": "active",
+          "device": "gpu",
+          "active_provider": "DmlExecutionProvider",
+          "providers_used": [
+            "DmlExecutionProvider"
+          ],
+          "available_providers": [
+            "DmlExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "gpu_device_id": 0,
+          "preference": "directml",
+          "cpu_threads": 4,
+          "fallback_events": []
+        }
+      },
+      {
+        "width": 8055,
+        "height": 7489,
+        "count": 607,
+        "elapsed_seconds": 31.59,
+        "compute": {
+          "status": "active",
+          "device": "gpu",
+          "active_provider": "DmlExecutionProvider",
+          "providers_used": [
+            "DmlExecutionProvider"
+          ],
+          "available_providers": [
+            "DmlExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "gpu_device_id": 0,
+          "preference": "directml",
+          "cpu_threads": 4,
+          "fallback_events": []
+        }
+      },
+      {
+        "width": 8054,
+        "height": 7484,
+        "count": 571,
+        "elapsed_seconds": 31.02,
+        "compute": {
+          "status": "active",
+          "device": "gpu",
+          "active_provider": "DmlExecutionProvider",
+          "providers_used": [
+            "DmlExecutionProvider"
+          ],
+          "available_providers": [
+            "DmlExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "gpu_device_id": 0,
+          "preference": "directml",
+          "cpu_threads": 4,
+          "fallback_events": []
+        }
+      },
+      {
+        "width": 8053,
+        "height": 7479,
+        "count": 840,
+        "elapsed_seconds": 31.88,
+        "compute": {
+          "status": "active",
+          "device": "gpu",
+          "active_provider": "DmlExecutionProvider",
+          "providers_used": [
+            "DmlExecutionProvider"
+          ],
+          "available_providers": [
+            "DmlExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "gpu_device_id": 0,
+          "preference": "directml",
+          "cpu_threads": 4,
+          "fallback_events": []
+        }
+      },
+      {
+        "width": 8054,
+        "height": 7478,
+        "count": 767,
+        "elapsed_seconds": 36.21,
+        "compute": {
+          "status": "active",
+          "device": "gpu",
+          "active_provider": "DmlExecutionProvider",
+          "providers_used": [
+            "DmlExecutionProvider"
+          ],
+          "available_providers": [
+            "DmlExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "gpu_device_id": 0,
+          "preference": "directml",
+          "cpu_threads": 4,
+          "fallback_events": []
+        }
+      }
+    ],
+    "provider": "DmlExecutionProvider",
+    "pause_resume_concurrent_review_and_all_objects_export": "passed"
+  },
+  "packaged_cpu_batch": {
+    "status": "passed",
+    "exe_sha256": "8717e4493689c564964b6b78424426428c14b6b6d445bdacb6d35983fdd2c28c",
+    "scope": "Actual Windows EXE; three 1024px crops, CPU; not a full-image batch benchmark.",
+    "constraints": {
+      "enforced": true,
+      "logical_cpus": 2,
+      "affinity_mask": 3,
+      "per_process_commit_limit_bytes": 4294967296,
+      "scope": "JobObject inherited by frozen child process; not a whole-machine RAM simulation"
+    },
+    "paused_restart_recovery": "passed",
+    "duplicate_import_reuse": "passed",
+    "completed_images": 3,
+    "object_rows": 94,
+    "all_objects_csv": "passed",
+    "cpu_analysis_seconds": [
+      19.3,
+      19.06,
+      19.28
+    ]
+  },
+  "limitations": [
+    "GPU timing covers the source workflow, not an EXE GPU benchmark.",
+    "50-job scheduling stress uses simulated inference, not 50 full TIFFs.",
+    "CPU process commit limits and affinity do not emulate a particular laptop or total system RAM."
+  ],
+  "packaged_cpu_full_image": {
+    "status": "passed",
+    "exe_sha256": "8717e4493689c564964b6b78424426428c14b6b6d445bdacb6d35983fdd2c28c",
+    "constraints": {
+      "enforced": true,
+      "logical_cpus": 4,
+      "affinity_mask": 15,
+      "per_process_commit_limit_bytes": 4294967296,
+      "scope": "JobObject inherited by frozen child process; not a whole-machine RAM simulation"
+    },
+    "duplicate_during_inference": "passed",
+    "full_image_tiles_csv_analysis_bundle": "passed",
+    "repeated_crop_labels_measurements_probability": "passed",
+    "restart_preserves_full_image_csv_and_cells": "passed",
+    "crop_private_memory_change_first_to_third_bytes": 4898816,
+    "memory": {
+      "tree_working_bytes": 1900961792,
+      "tree_private_bytes": 2388934656,
+      "largest_process_peak_commit_bytes": 2487468032,
+      "sample_count": 1429
+    },
+    "limitations": [
+      "CPU affinity and process commit limits emulate constraints, not a particular laptop CPU or total system RAM."
+    ],
+    "runs": [
+      {
+        "elapsed_seconds": 696.97,
+        "wall_seconds": 698.02,
+        "count": 858,
+        "compute": {
+          "status": "active",
+          "device": "cpu",
+          "active_provider": "CPUExecutionProvider",
+          "providers_used": [
+            "CPUExecutionProvider"
+          ],
+          "available_providers": [
+            "DmlExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "gpu_device_id": null,
+          "preference": "cpu",
+          "cpu_threads": 4,
+          "fallback_events": []
+        },
+        "health_latency_max_seconds": 0.031000000002677552,
+        "health_latency_p95_seconds": 0.01600000000325963,
+        "settled_memory": {
+          "tree_working_bytes": 1235492864,
+          "tree_private_bytes": 1703133184,
+          "largest_process_peak_commit_bytes": 2391871488,
+          "processes": [
+            {
+              "pid": 26584,
+              "working_bytes": 1218674688,
+              "private_bytes": 1700540416,
+              "affinity_mask": 15
+            },
+            {
+              "pid": 41440,
+              "working_bytes": 8052736,
+              "private_bytes": 1200128,
+              "affinity_mask": 15
+            },
+            {
+              "pid": 44428,
+              "working_bytes": 8765440,
+              "private_bytes": 1392640,
+              "affinity_mask": 15
+            }
+          ]
+        }
+      },
+      {
+        "elapsed_seconds": 11.29,
+        "wall_seconds": 12.09,
+        "count": 28,
+        "compute": {
+          "status": "active",
+          "device": "cpu",
+          "active_provider": "CPUExecutionProvider",
+          "providers_used": [
+            "CPUExecutionProvider"
+          ],
+          "available_providers": [
+            "DmlExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "gpu_device_id": null,
+          "preference": "cpu",
+          "cpu_threads": 4,
+          "fallback_events": []
+        },
+        "health_latency_max_seconds": 0.015999999988707714,
+        "health_latency_p95_seconds": 0.015399999995133837,
+        "settled_memory": {
+          "tree_working_bytes": 1231654912,
+          "tree_private_bytes": 1698873344,
+          "largest_process_peak_commit_bytes": 2487468032,
+          "processes": [
+            {
+              "pid": 26584,
+              "working_bytes": 1214836736,
+              "private_bytes": 1696280576,
+              "affinity_mask": 15
+            },
+            {
+              "pid": 41440,
+              "working_bytes": 8052736,
+              "private_bytes": 1200128,
+              "affinity_mask": 15
+            },
+            {
+              "pid": 44428,
+              "working_bytes": 8765440,
+              "private_bytes": 1392640,
+              "affinity_mask": 15
+            }
+          ]
+        },
+        "labels_sha256": "bee4d3bdcd200d4e9f79d8285e10d68fbc81a7bc774ceca8c75b0e98e000edbc",
+        "probability_sha256": "957ad115aa6a1a8f35ac782807a6aba9d7daafad96f320e17446e77fe222cefc"
+      },
+      {
+        "elapsed_seconds": 11.28,
+        "wall_seconds": 12.09,
+        "count": 28,
+        "compute": {
+          "status": "active",
+          "device": "cpu",
+          "active_provider": "CPUExecutionProvider",
+          "providers_used": [
+            "CPUExecutionProvider"
+          ],
+          "available_providers": [
+            "DmlExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "gpu_device_id": null,
+          "preference": "cpu",
+          "cpu_threads": 4,
+          "fallback_events": []
+        },
+        "health_latency_max_seconds": 0.01600000000325963,
+        "health_latency_p95_seconds": 0.01600000000325963,
+        "settled_memory": {
+          "tree_working_bytes": 1231749120,
+          "tree_private_bytes": 1698963456,
+          "largest_process_peak_commit_bytes": 2487468032,
+          "processes": [
+            {
+              "pid": 26584,
+              "working_bytes": 1214930944,
+              "private_bytes": 1696370688,
+              "affinity_mask": 15
+            },
+            {
+              "pid": 41440,
+              "working_bytes": 8052736,
+              "private_bytes": 1200128,
+              "affinity_mask": 15
+            },
+            {
+              "pid": 44428,
+              "working_bytes": 8765440,
+              "private_bytes": 1392640,
+              "affinity_mask": 15
+            }
+          ]
+        },
+        "labels_sha256": "bee4d3bdcd200d4e9f79d8285e10d68fbc81a7bc774ceca8c75b0e98e000edbc",
+        "probability_sha256": "957ad115aa6a1a8f35ac782807a6aba9d7daafad96f320e17446e77fe222cefc"
+      },
+      {
+        "elapsed_seconds": 12.06,
+        "wall_seconds": 12.11,
+        "count": 28,
+        "compute": {
+          "status": "active",
+          "device": "cpu",
+          "active_provider": "CPUExecutionProvider",
+          "providers_used": [
+            "CPUExecutionProvider"
+          ],
+          "available_providers": [
+            "DmlExecutionProvider",
+            "CPUExecutionProvider"
+          ],
+          "gpu_device_id": null,
+          "preference": "cpu",
+          "cpu_threads": 4,
+          "fallback_events": []
+        },
+        "health_latency_max_seconds": 0.01600000000325963,
+        "health_latency_p95_seconds": 0.015400000000954605,
+        "settled_memory": {
+          "tree_working_bytes": 1235935232,
+          "tree_private_bytes": 1703772160,
+          "largest_process_peak_commit_bytes": 2487468032,
+          "processes": [
+            {
+              "pid": 26584,
+              "working_bytes": 1219117056,
+              "private_bytes": 1701179392,
+              "affinity_mask": 15
+            },
+            {
+              "pid": 41440,
+              "working_bytes": 8052736,
+              "private_bytes": 1200128,
+              "affinity_mask": 15
+            },
+            {
+              "pid": 44428,
+              "working_bytes": 8765440,
+              "private_bytes": 1392640,
+              "affinity_mask": 15
+            }
+          ]
+        },
+        "labels_sha256": "bee4d3bdcd200d4e9f79d8285e10d68fbc81a7bc774ceca8c75b0e98e000edbc",
+        "probability_sha256": "957ad115aa6a1a8f35ac782807a6aba9d7daafad96f320e17446e77fe222cefc"
+      }
+    ],
+    "dimensions": [
+      8057,
+      7479
+    ],
+    "source_sha256": "b4a871a75a608cc3383af968f1d64ba0d4c05c50418e24c9986de69aa4e494cd"
+  }
+}

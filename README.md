@@ -19,11 +19,11 @@ Built for TRAP-stained bright-field images, OCLAST bundles its U-Net++ model, in
 
 1. Download **OCLAST.exe** from the [latest release](https://github.com/yuvipaloozie/OCLAST-dashboard/releases/latest), rather than the Source code archives.
 2. Close any previous OCLAST instance, then double-click the executable. After unpacking, it opens your browser at `http://127.0.0.1:8000` or an available local port shown in the console.
-3. Choose **Open image**, then **Analyze image**. Review the saved masks and export your results. Use a single 8-bit RGB image, up to 64 megapixels and 512 MB.
+3. Choose **Open images** or **Open folder**. Analyze one image in **Review**, or start the sequential queue from **Images**. Each image can be up to 64 megapixels and 512 MB.
 
 Keep the OCLAST console window open while working. Close it to stop the app; closing the browser tab alone does not stop the service. The executable is unsigned, so Windows may show an unrecognized-publisher notice.
 
-**Input:** a single 8-bit RGB TIFF, PNG, or JPEG. Convert grayscale, 16-bit, alpha-channel, or stack data before analysis. Large scans require available memory and disk space.
+**Input:** 8-bit RGB TIFF, PNG, or JPEG files. Convert grayscale, 16-bit, alpha-channel, or stack data before analysis. Large scans require available memory and disk space.
 
 ## Review and explore
 
@@ -35,6 +35,7 @@ Keep the OCLAST console window open while working. Close it to stop the app; clo
 | Morphology distributions | Area and circularity KDEs with focused/full ranges and an explicit count of objects outside the focused view. |
 | Object explorer | Linked shape plots, sortable cell crops, group selections, and descriptive summaries. |
 | Manual review | Add a polygon, remove a detection, and undo the last edit. Saved masks and measurements update together. |
+| Image collection | Import multiple files or a folder; queue analysis, pause after the current image, compare per-image measurements, and export selected images together. |
 | Local projects and exports | Reopen results without rerunning inference; export measurements, masks, or training pairs. |
 
 Objects spanning multiple tiles keep one global identity and are counted once. Tile counts use object centers; neighboring thumbnails may show different parts of the same mask. Overlapping manual additions are rejected to prevent duplicate counts.
@@ -57,7 +58,7 @@ Expand **Explore objects** in Measurements to browse cell crops and inline selec
 
 ## GPU, storage, and exports
 
-The Windows release uses **ONNX Runtime DirectML** on compatible GPUs, with automatic CPU retry if GPU execution fails. A separate CUDA toolkit is not required. Each saved run records GPU, CPU, or mixed execution. Preprocessing, object separation, and saving remain CPU tasks. CPU-only operation is supported; see [laptop reliability notes](docs/CPU_HARDENING.md) for validation and image limits.
+The Windows release uses **ONNX Runtime DirectML** on compatible GPUs, with automatic CPU retry if GPU execution fails. A separate CUDA toolkit is not required. Each saved run records GPU, CPU, or mixed execution. Preprocessing, object separation, and saving remain CPU tasks. Large scans can take several minutes on CPU. See [laptop reliability notes](docs/CPU_HARDENING.md) for validation and image limits.
 
 One packaged-app test processed an **8,057 × 7,479-pixel** image in **32.11 seconds** on an RTX 3060 Ti, excluding import. Timings vary by hardware and image; release validation records are in [docs/releases](docs/releases).
 
@@ -69,9 +70,9 @@ All analysis runs locally; images are not uploaded to a hosted service. Fonts an
 | Source checkout | `data/projects/` |
 | Custom directory | Set `OCLAST_DATA_DIR` before starting |
 
-Projects retain one lossless source PNG, compressed predictions and instance labels, measurements, processing settings, and review state. One undo snapshot is retained. Back up the **entire project folder** to preserve an editable analysis. Interrupted jobs can be rerun, but partially completed inference is not resumed.
+Projects retain one lossless source PNG, compressed predictions and instance labels, measurements, processing settings, and review state. One undo snapshot is retained. Back up the **entire project folder** to preserve an editable analysis. The queue persists and reopens paused after a restart. Interrupted images can be rerun; partially completed inference is not resumed.
 
-- **CSV:** object IDs, centroids, area, circularity, solidity, eccentricity, and manual-review flags.
+- **CSV:** all objects by default, including IDs, centroids, area, circularity, solidity, eccentricity, and manual-review flags. Collection exports include image summaries or all objects with source provenance.
 - **Analysis bundle:** metadata, measurements, instance labels, and a foreground mask; it does not replace the full project folder.
 - **Training pairs:** lossless image/mask PNGs for every tile, including empty and partial edge regions.
 
