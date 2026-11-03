@@ -14,6 +14,7 @@ import sys
 import time
 import zipfile
 import tempfile
+import re
 from PIL import Image, UnidentifiedImageError
 from oclast.resources import require_memory
 from concurrent.futures import ThreadPoolExecutor
@@ -25,7 +26,7 @@ import cv2
 # One image worker; avoid a second machine-wide pool for 512px preprocessing.
 cv2.setNumThreads(1)
 import numpy as np
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -34,6 +35,7 @@ from pydantic import BaseModel, Field
 from oclast.analysis import infer_image, separate_whole_image, model_hash, compute_status
 from oclast.projects import Projects
 from oclast.thumbnails import object_thumbnail
+from oclast.batch import AnalysisQueue, image_summary, source_path, spreadsheet_text, write_collection_csv
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_DATA = Path(os.environ.get('LOCALAPPDATA',str(Path.home()))) / 'OCLAST' / 'projects' if getattr(sys,'frozen',False) else ROOT/'data'/'projects'
@@ -83,7 +85,12 @@ MAX_IMAGE_PIXELS = 64_000_000
 
 
 @app.post('/api/projects',status_code=201)
-def create_project(file: UploadFile=File(...)):
+def create_project(file: UploadFile=File(...), relative_path:str=Form('',alias='source_path'),
+                   reuse_existing:bool=Form(False)):
+    try:
+        relative_path=source_path(relative_path,Path(file.filename or 'Untitled image').name)
+    except ValueError as exc:
+        raise HTTPException(400,str(exc)) from exc
     if not resource_lock.acquire(blocking=False):
         raise HTTPException(409,'Wait for the current image operation to finish, then try again.')
     try:
@@ -102,6 +109,12 @@ def create_project(file: UploadFile=File(...)):
                     target.write(chunk)
             if not size:
                 raise HTTPException(400,'Choose a nonempty TIFF, PNG, or JPEG image.')
+            if reuse_existing:
+                for existing in store.list():
+                    if (existing.get('source_sha256')==digest.hexdigest() and
+                            existing.get('source_path',existing['name'])==relative_path and
+                            (existing['status']!='complete' or existing.get('model',{}).get('sha256')==model_hash())):
+                        return existing
             try:
                 with Image.open(path) as header:
                     pixels=header.width*header.height
@@ -120,7 +133,8 @@ def create_project(file: UploadFile=File(...)):
                 raise HTTPException(400,'This image could not be decoded. Choose a readable TIFF, PNG, or JPEG.')
             if image.dtype!=np.uint8 or image.ndim!=3 or image.shape[2]!=3:
                 raise HTTPException(400,'This model expects a single 8-bit RGB image. Convert grayscale, 16-bit, RGBA, or stack data before analysis.')
-            return store.create(image,Path(file.filename or 'Untitled image').name,digest.hexdigest())
+            meta=store.create(image,Path(file.filename or 'Untitled image').name,digest.hexdigest())
+            return store.update(meta['id'],source_path=relative_path,source_size_bytes=size)
     except MemoryError as exc:
         raise HTTPException(413,str(exc) or 'Not enough memory. Close other applications or crop the image and retry.') from exc
     finally:
@@ -175,9 +189,16 @@ def rename(project_id:str,body:Rename):
     return store.update(project_id,name=body.name.strip() or 'Untitled analysis')
 
 
-def analyze(project_id):
+def analyze(project_id,release_resource=True):
     started=time.perf_counter()
     try:
+        # A prior inspected image can leave ~480MB of probability/label maps
+        # cached. Browser tiles remain visible; a later pan can reload them.
+        # Drop these inactive arrays before the next full-size job allocates.
+        with store.lock:
+            store.source.cache_clear()
+            store.labels.cache_clear()
+            store.probability.cache_clear()
         image=store.source(project_id)
         require_memory(image.shape[0]*image.shape[1]*17+1536*1024**2,'analyze this image')
         total=((image.shape[0]+511)//512)*((image.shape[1]+511)//512)
@@ -201,12 +222,59 @@ def analyze(project_id):
             message='Not enough memory. Close other applications or crop the image into smaller images and retry.'
         store.mark_error(project_id,message,round(time.perf_counter()-started,1))
     finally:
-        resource_lock.release()
+        if release_resource:resource_lock.release()
+
+
+@lru_cache(maxsize=1)
+def queue_for(project_store):
+    return AnalysisQueue(project_store,workers,resource_lock,lambda identifier:analyze(identifier,release_resource=False))
+
+
+class ImageSelection(BaseModel):
+    project_ids:list[str]=Field(min_length=1,max_length=200)
+
+
+class QueueAction(BaseModel):
+    action:str
+
+
+@app.get('/api/queue')
+def queue_state():
+    return queue_for(store).snapshot()
+
+
+@app.post('/api/queue',status_code=202)
+def enqueue_images(body:ImageSelection):
+    with job_lock:
+        try:return queue_for(store).enqueue(body.project_ids)
+        except ValueError as exc:raise HTTPException(409,str(exc)) from exc
+
+
+@app.post('/api/queue/control')
+def control_queue(body:QueueAction):
+    with job_lock:
+        try:return queue_for(store).control(body.action)
+        except ValueError as exc:raise HTTPException(400,str(exc)) from exc
+
+
+@app.post('/api/collection/summary')
+def collection_summary(body:ImageSelection):
+    result=[]
+    for identifier in dict.fromkeys(body.project_ids):
+        with store.lock:
+            meta=store.get(identifier)
+            if meta['status']!='complete':raise HTTPException(409,'Finish analysis for every selected image before comparing.')
+            result.append(image_summary(meta,store.cells(identifier)))
+    return result
 
 
 @app.post('/api/projects/{project_id}/analyze',status_code=202)
 def run_analysis(project_id:str):
     with job_lock:
+        queue=queue_for(store)
+        with queue.lock:
+            if queue._scheduled:
+                raise HTTPException(409,'The image queue is active. Add this image to the queue instead.')
         meta=store.get(project_id)
         if meta['status'] not in ('ready','error','interrupted'):
             raise HTTPException(409,'This analysis is already running or saved. Create another project to run it again.')
@@ -309,9 +377,8 @@ def csv_data(project_id):
     stream=io.StringIO(newline='')
     writer=csv.writer(stream)
     writer.writerow(['Source','ObjectID','CentroidX_px','CentroidY_px','Area_px2','Circularity','Solidity','Eccentricity','Manual'])
-    name=store.get(project_id)['name']
-    # Prevent filenames from becoming spreadsheet formulas on export.
-    if name.startswith(('=','+','-','@')): name="'"+name
+    # Prevent filenames (including leading whitespace) becoming formulas.
+    name=spreadsheet_text(store.get(project_id)['name'])
     for c in store.cells(project_id):
         writer.writerow([name,c['id'],c['x'],c['y'],c['area'],c['circularity'],c['solidity'],c['eccentricity'],c['manual']])
     return stream.getvalue().encode('utf-8-sig')
@@ -326,13 +393,39 @@ class TemporaryArchiveResponse(FileResponse):
             Path(self.path).unlink(missing_ok=True)
 
 
+def export_filename(meta,suffix):
+    stem=re.sub(r'[^A-Za-z0-9._-]','_',Path(meta['name']).stem)[:100] or 'image'
+    return f"{stem}_{meta['id'][:8]}_{suffix}"
+
+
+@app.get('/api/collection/export/{kind}')
+def collection_export(kind:str,ids:str):
+    if kind not in ('summary.csv','objects.csv'):
+        raise HTTPException(404,'Unknown collection export')
+    identifiers=list(dict.fromkeys(part for part in ids.split(',') if part))
+    if not 1<=len(identifiers)<=200:
+        raise HTTPException(400,'Select between 1 and 200 images.')
+    for identifier in identifiers:
+        if store.get(identifier)['status']!='complete':
+            raise HTTPException(409,'Finish analysis for every selected image before exporting.')
+    descriptor,filename=tempfile.mkstemp(prefix='oclast-collection-',suffix='.csv')
+    try:
+        with os.fdopen(descriptor,'w',encoding='utf-8-sig',newline='') as stream:
+            write_collection_csv(stream,store,identifiers,kind)
+        return TemporaryArchiveResponse(filename,media_type='text/csv',filename=f'oclast_{len(identifiers)}_images_{kind}')
+    except BaseException:
+        Path(filename).unlink(missing_ok=True)
+        raise
+
+
 @app.get('/api/projects/{project_id}/export/{kind}')
 def export(project_id:str,kind:str):
     meta=store.get(project_id)
     if meta['status']!='complete':
         raise HTTPException(409,'Finish analysis before exporting')
     if kind=='measurements.csv':
-        return Response(csv_data(project_id),media_type='text/csv',headers={'Content-Disposition':'attachment; filename="oclast_measurements.csv"'})
+        filename=export_filename(meta,'measurements.csv')
+        return Response(csv_data(project_id),media_type='text/csv',headers={'Content-Disposition':f'attachment; filename="{filename}"'})
     if kind not in ('analysis.zip','training.zip'):
         raise HTTPException(404,'Unknown export')
     if not resource_lock.acquire(blocking=False):
@@ -365,7 +458,7 @@ def export(project_id:str,kind:str):
                             if not ok: raise OSError('Could not encode an exported image tile')
                             archive.writestr(f'{prefix}/{name}.png',png.tobytes())
                 archive.writestr('project.json',json.dumps(meta,indent=2))
-        return TemporaryArchiveResponse(filename,media_type='application/zip',filename=f'oclast_{kind}')
+        return TemporaryArchiveResponse(filename,media_type='application/zip',filename=export_filename(meta,kind))
     except BaseException:
         if filename is not None:
             Path(filename).unlink(missing_ok=True)

@@ -49,11 +49,11 @@
 .explorer-content{
   display:flex;
   flex-direction:column;
-  gap:10px;
-  padding:12px;
+  gap:6px;
+  padding:10px;
   flex:1;
   min-height:0;
-  overflow:hidden
+  overflow-y:auto
 }
 .explorer-view-controls{
   display:flex;
@@ -84,9 +84,9 @@
 .object-scope select,.object-axis-controls select,.object-gallery-controls select,.object-range-form input{
   width:100%;
   min-width:0;
-  border:1px solid var(--edge);
+  border:1px solid var(--control,var(--edge));
   border-radius:9px;
-  padding:7px 8px;
+  padding:6px 8px;
   font:inherit;
   font-size:12px;
   color:var(--ink);
@@ -140,15 +140,16 @@
   display:flex;
   align-items:flex-end;
   gap:8px;
-  margin-bottom:10px;
+  margin-bottom:6px;
   flex:none
 }
 .object-gallery-controls label{
   display:flex;
-  flex-direction:column;
-  gap:5px;
+  flex-direction:row;
+  align-items:center;
+  gap:8px;
   flex:1;
-  font-size:11px;
+  font-size:12px;
   color:var(--muted)
 }
 .object-gallery-controls .ui-button{
@@ -240,8 +241,9 @@
   padding:14px 5px
 }
 .explorer-plot-content{
-  overflow:auto;
-  min-height:0
+  overflow:visible;
+  flex:none;
+  min-height:300px
 }
 .object-axis-controls{
   display:grid;
@@ -275,7 +277,7 @@
   min-height:32px
 }
 .object-plot{
-  margin:10px 0
+  margin:6px 0
 }
 .object-axis-label{
   font-size:11px;
@@ -332,7 +334,7 @@
   pointer-events:none
 }
 .object-plot figcaption{
-  min-height:32px;
+  min-height:24px;
   font-size:11px;
   line-height:1.5;
   color:var(--muted);
@@ -373,11 +375,48 @@
   min-height:max-content
 }
 
-/* Statistics are always visible; the gallery retains its own useful scroll area. */
+/* Compact, always-inline statistics leave the masks and plot room to work. */
 .object-statistics { flex: none; }
-.object-statistics .object-summary { margin: 0; gap: 6px; }
-.object-statistics .object-summary > div { padding: 7px 8px; }
-.object-statistics .object-summary dt { font-size: 11px; line-height: 15px; }
-.object-statistics .object-summary dd { margin-top: 3px; font-size: 13px; line-height: 18px; }
-.explorer-content { overflow-y: auto; }
-.object-gallery { min-height: 160px; }
+.object-statistics .object-summary {
+  margin: 0;
+  padding: 5px 8px;
+  gap: 2px 12px;
+  background: #f4eff7;
+  border-radius: 10px;
+}
+.object-statistics .object-summary > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 5px;
+  min-height: 22px;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+.object-statistics .object-summary dt { font-size: 11px; line-height: 16px; }
+.object-statistics .object-summary dd {
+  flex: none;
+  margin: 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.object-gallery { flex: 1 0 220px; min-height: 220px; }
+.object-gallery-grid { min-height: 160px; }
+.explorer-plot-content { flex: none; overflow: visible; min-height: 300px; }
+.object-plot { min-height: 214px; }
+.object-axis-controls label { gap: 3px; }
+.object-plot-tools { margin-block: 5px; }
+@media (max-width: 600px) {
+  .explorer-content { padding: 10px; gap: 8px; }
+  .object-statistics .object-summary { padding-block: 7px; }
+  .object-statistics .object-summary dt { font-size: 12px; }
+  .object-statistics .object-summary > div { min-height: 24px; }
+  .object-gallery { flex-basis: 250px; min-height: 250px; }
+  .object-gallery-grid { min-height: 190px; }
+}
+
+.object-gallery-controls label { min-width: 0; }
+.object-gallery-controls label select { width: 0; flex: 1; }

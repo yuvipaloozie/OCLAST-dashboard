@@ -78,7 +78,7 @@ spinning disabled. Set `OCLAST_DEVICE=cpu` and optionally `OCLAST_CPU_THREADS=2`
 to test without GPU acceleration. The Windows bundle includes CPU inference;
 users do not need Python, CUDA, Node, or an Internet connection to analyze images.
 
-Imports currently accept single 8-bit RGB TIFF/PNG/JPEG images up to 64 megapixels
+Imports accept 8-bit RGB TIFF/PNG/JPEG images, one at a time or through multi-file/folder selection, up to 64 megapixels
 and 512 MB. Available-memory checks can reject smaller images when memory is low.
 Only one import, inference job, or archive build runs at a time. Image archives
 are built in temporary disk storage and streamed, so allow free space for both
@@ -96,3 +96,19 @@ It tests a full image, repeated crops, duplicate launch, exports and reopening.
 These limits approximate constrained resources; they do not emulate an older
 laptop's processor, total physical RAM, antivirus or thermal throttling.
 See [CPU hardening notes](CPU_HARDENING.md) for results and remaining validation.
+
+## Batch workflow
+
+`GET/POST /api/queue` reads/enqueues saved project IDs. `POST /api/queue/control` accepts `pause`, `resume`, or `clear`; pause finishes the current image first. A single worker and shared resource admission prevent concurrent imports, inference, and large archives. Failures are recorded per image and do not discard later jobs. Queue state is persisted; restart recovery requires Resume.
+
+Multi-file and folder imports stream one file at a time. Relative folder labels are metadata only. `reuse_existing=true` reuses matching source hashes and relative labels, preserving reviewed results when the model matches. Unsupported files are reported individually. Collection comparison is descriptive image-level data; filenames do not establish treatments or independent replicates.
+
+`POST /api/collection/summary` accepts `project_ids`. Collection CSV endpoints are `/api/collection/export/summary.csv` and `/api/collection/export/objects.csv`, with comma-separated `ids`. All completed images are selected initially, and exports include every object from selected images, independent of explorer filters. Per-image CSV also defaults to every object and uses a source-specific filename. Large ZIP downloads require pausing the inference queue; CSV remains available while reviewing completed images.
+
+Validate the packaged batch workflow separately (three 1024px crops, CPU, two logical CPUs, 4 GiB per-process commit cap):
+
+```powershell
+.venv\Scripts\python.exe packaging/verify_batch_package.py --image "Input Data/700cell_Rank75_Itaconate-VC_B10.tif" --output "batch-package-report.json"
+```
+
+This checks duplicate import reuse, paused queue recovery across an EXE restart, sequential completion, and combined all-object CSV export. It does not simulate fifty full-resolution images. The 50-job regression in `tests/test_batch_workflow.py` uses lightweight fake inference to check scheduling and failure continuation.

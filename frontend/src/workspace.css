@@ -14,7 +14,7 @@
   --muted:#665d6e;
   --accent:#825493;
   --edge:#e6e0eb;
-  --control:#b4a7bd;
+  --control:#8b7b98;
   --mint:#edf7f2;
   --pink:#f9edf6;
   --sand:#f9f5e9;
@@ -1828,3 +1828,46 @@ button:hover,.button:hover,.ui-button:hover{
 }
 
 .ui-button.project-card { align-items: flex-start; justify-content: flex-start; }
+
+/* Batch navigation and review share the same compact lab-workspace controls. */
+.workspace-switcher { margin-inline: auto; }
+.workspace-switcher .ui-segmented { flex-wrap: nowrap; }
+.ui-segmented .ui-segment[data-state=on]:not(:focus-visible) {
+  outline: 1.5px solid var(--accent); outline-offset: -1.5px;
+}
+.project-card.selected { border-color: var(--accent); }
+.selected-cell-metrics.metrics > .metric-card { min-height: 70px; padding: 9px 11px 12px; }
+.selected-cell-metrics.metrics strong { font-size: 22px; }
+.selected-cell-metrics .metric-graphic { opacity: .5; width: 24px; height: 24px; }
+.upload-banner { display: flex; align-items: center; gap: 10px; }
+.upload-banner > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.upload-banner > .ui-button { flex: none; }
+.import-issues { padding: 10px 16px; background: var(--sand); border-radius: 16px; }
+.import-issues ul { max-height: 140px; overflow: auto; padding-left: 20px; }
+.import-issues li { overflow-wrap: anywhere; margin-bottom: 6px; }
+.export-scope, .export-unavailable { display: block; padding: 8px 10px; color: var(--muted); font-size: 12px; }
+.export-menu .ui-button { width: 100%; justify-content: flex-start; }
+.object-range { padding: 0 14px 8px; color: var(--muted); font-size: 12px; }
+.load-objects { margin: 10px 14px; align-self: center; flex: none; }
+@media(max-width: 1100px) {
+  .open-folder span { display: none; }
+  .open-folder { width: 36px; padding-inline: 8px; }
+  .app-header { gap: 12px; }
+}
+@media(max-width: 600px) {
+  .app-header { flex-wrap: wrap; gap: 8px; }
+  .workspace-switcher { order: 3; width: 100%; margin: 0; }
+  .workspace-switcher .ui-segmented { width: 100%; }
+  .workspace-switcher .ui-segment { flex: 1; }
+  .header-actions { margin-left: auto; }
+  .header-actions .runtime-status, .header-actions .keyboard-help { display: none; }
+}
+
+.collection-search input:focus-visible { outline: none; }
+.project-card .project-name { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+.app-header { flex: none; }
+@media(max-width: 600px) {
+  .app-header { height: auto; min-height: 112px; padding-block: 8px; }
+  .workspace-switcher { flex-basis: 100%; }
+}
