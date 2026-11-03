@@ -6,3 +6,4 @@ opencv-python-headless
 scikit-image
 scipy
 pandas
+Pillow

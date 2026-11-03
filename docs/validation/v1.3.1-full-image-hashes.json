@@ -1,0 +1,11 @@
+{
+  "count": 858,
+  "elapsed_seconds": 794.94,
+  "model": {
+    "id": "unetpp_curriculum",
+    "file": "unetplusplus.onnx",
+    "sha256": "aa9da6f197ffc6b2cd294cefadc5d01a91c9d45e80163c65b171c90419ec71ee"
+  },
+  "labels_sha256": "db2dbadace4a7b7cf14695605db3b47a2a96a9d0d7ece72f0aecf33e83424dc4",
+  "probability_sha256": "5c18e119784736b7f4dce436aa0b20637a6da57909b8cbd883acaaa772f61970"
+}

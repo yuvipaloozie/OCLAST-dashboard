@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "exe_sha256": "82ac9c9135e8a22a43e4b9664daa62aa17c1ae945ab749667fa3d2d937e6c3bf",
+  "scenarios": [
+    {
+      "scenario": "forced_termination_during_cpu_inference",
+      "result": "passed",
+      "completed_tiles_before_kill": 1,
+      "reopened_status": "interrupted",
+      "rerun_status": "complete",
+      "count": 28,
+      "elapsed_seconds": 46.26,
+      "peak_process_commit_bytes": 1702387712
+    },
+    {
+      "scenario": "cpu_allocation_failure",
+      "result": "passed",
+      "commit_limit_bytes": 1073741824,
+      "project_error": "Not enough memory. Close other applications or crop the image into smaller images and retry.",
+      "api_alive_after_error": true,
+      "peak_process_commit_bytes": 556208128
+    },
+    {
+      "scenario": "retry_after_allocation_failure",
+      "result": "passed",
+      "count": 28,
+      "exact_cells_and_csv_preserved": true,
+      "elapsed_seconds": 36.03
+    }
+  ],
+  "limits": {
+    "cpu_threads": 2,
+    "logical_cpus": 2,
+    "normal_commit_gib": 4,
+    "low_memory_commit_gib": 1.0
+  }
+}

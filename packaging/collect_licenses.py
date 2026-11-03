@@ -26,7 +26,7 @@ for name in packages:
         shutil.copyfile(source,destination)
         copied.append(f'{name} {dist.version}: {entry}')
 root.mkdir(parents=True,exist_ok=True)
-(root/'INDEX.txt').write_text('Third-party notices included with OCLAST 1.3.0\n\n'+'\n'.join(copied)+'\n',encoding='utf-8')
+(root/'INDEX.txt').write_text('Third-party notices included with OCLAST 1.3.1\n\n'+'\n'.join(copied)+'\n',encoding='utf-8')
 print(f'Collected {len(copied)} license/notice files.')
 
 # Frontend libraries compiled into the desktop bundle, including their helpers.

@@ -57,8 +57,42 @@ Advanced overrides can be set before launching the executable or Python service:
 
 ```powershell
 $env:OCLAST_DEVICE = "cpu"       # auto, cpu, cuda, or directml
+$env:OCLAST_CPU_THREADS = "2"  # optional CPU thread budget
 $env:OCLAST_GPU_DEVICE_ID = "0"   # GPU adapter index
 $env:OCLAST_PORT = "8001"        # optional if port 8000 is already occupied
 ```
 
 The source implementation can also use CUDA when its ONNX provider and required libraries are installed. Install only one ONNX Runtime distribution in an environment. The default Windows requirements use DirectML, which also includes CPU execution; `requirements-cpu.txt` is available for a separate CPU-only environment.
+
+
+## Laptop CPU validation
+
+The desktop launcher reserves its loopback port before opening projects, prevents
+concurrent writers to the same data directory, and opens the browser only after
+startup succeeds. If the default port is occupied by another service it chooses
+an available port. An explicit occupied `OCLAST_PORT` produces an error instead.
+Diagnostic logs rotate under `%LOCALAPPDATA%/OCLAST/logs` (about 3 MB total).
+
+CPU inference uses half the logical cores, capped at four, with idle worker
+spinning disabled. Set `OCLAST_DEVICE=cpu` and optionally `OCLAST_CPU_THREADS=2`
+to test without GPU acceleration. The Windows bundle includes CPU inference;
+users do not need Python, CUDA, Node, or an Internet connection to analyze images.
+
+Imports currently accept single 8-bit RGB TIFF/PNG/JPEG images up to 64 megapixels
+and 512 MB. Available-memory checks can reject smaller images when memory is low.
+Only one import, inference job, or archive build runs at a time. Image archives
+are built in temporary disk storage and streamed, so allow free space for both
+saved projects and temporary exports. Keep the console open during use.
+
+Run the actual packaged app under CPU and memory constraints:
+
+```powershell
+.venv\Scripts\python.exe packaging/verify_cpu_package.py --image "Input Data/700cell_Rank75_Itaconate-VC_B10.tif" --output "cpu-package-report.json"
+```
+
+This Windows-only harness starts `dist/OCLAST.exe` in an empty directory with a
+clean runtime environment, two logical CPUs and a 4 GiB per-process commit limit.
+It tests a full image, repeated crops, duplicate launch, exports and reopening.
+These limits approximate constrained resources; they do not emulate an older
+laptop's processor, total physical RAM, antivirus or thermal throttling.
+See [CPU hardening notes](CPU_HARDENING.md) for results and remaining validation.

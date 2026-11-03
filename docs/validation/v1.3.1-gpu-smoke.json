@@ -1,0 +1,27 @@
+{
+  "exe_sha256": "82ac9c9135e8a22a43e4b9664daa62aa17c1ae945ab749667fa3d2d937e6c3bf",
+  "status": "passed",
+  "compute": {
+    "status": "active",
+    "device": "gpu",
+    "active_provider": "DmlExecutionProvider",
+    "providers_used": [
+      "DmlExecutionProvider"
+    ],
+    "available_providers": [
+      "DmlExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "gpu_device_id": 0,
+    "preference": "auto",
+    "cpu_threads": 4,
+    "fallback_events": []
+  },
+  "count": 28,
+  "elapsed_seconds": 3.59,
+  "model": {
+    "id": "unetpp_curriculum",
+    "file": "unetplusplus.onnx",
+    "sha256": "aa9da6f197ffc6b2cd294cefadc5d01a91c9d45e80163c65b171c90419ec71ee"
+  }
+}

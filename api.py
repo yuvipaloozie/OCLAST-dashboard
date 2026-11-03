@@ -1,4 +1,10 @@
 """OCLAST local desktop service: saved projects and full-resolution image tiles."""
+# Reserve the desktop instance before loading projects or native libraries.
+if __name__=='__main__':
+    from oclast.launcher import run
+    run(lambda: __import__('api').app)
+    raise SystemExit(0)
+
 import csv
 import hashlib
 import io
@@ -7,12 +13,17 @@ import os
 import sys
 import time
 import zipfile
+import tempfile
+from PIL import Image, UnidentifiedImageError
+from oclast.resources import require_memory
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from threading import Lock
 from functools import lru_cache
 
 import cv2
+# One image worker; avoid a second machine-wide pool for 512px preprocessing.
+cv2.setNumThreads(1)
 import numpy as np
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,7 +40,7 @@ DEFAULT_DATA = Path(os.environ.get('LOCALAPPDATA',str(Path.home()))) / 'OCLAST' 
 store = Projects(os.environ.get('OCLAST_DATA_DIR',str(DEFAULT_DATA)))
 workers = ThreadPoolExecutor(max_workers=1, thread_name_prefix='oclast-analysis')
 job_lock = Lock()
-app = FastAPI(title='OCLAST local analysis',version='1.3.0')
+app = FastAPI(title='OCLAST local analysis',version='1.3.1')
 app.add_middleware(CORSMiddleware,allow_origins=['http://127.0.0.1:5173','http://localhost:5173'],
                    allow_methods=['GET','POST','PATCH'],allow_headers=['Content-Type'])
 
@@ -40,9 +51,23 @@ async def missing_project(request, exc):
     return JSONResponse(status_code=404,content={'detail':'Saved project not found'})
 
 
+@app.exception_handler(OSError)
+async def storage_error(request, exc):
+    import logging
+    from fastapi.responses import JSONResponse
+    logging.getLogger(__name__).exception('Local file operation failed',exc_info=exc)
+    return JSONResponse(status_code=507,content={'detail':'Could not read or save local files. Check free disk space and folder access, then retry.'})
+
+
+@app.exception_handler(MemoryError)
+async def memory_error(request, exc):
+    from fastapi.responses import JSONResponse
+    return JSONResponse(status_code=413,content={'detail':'Not enough memory. Close other applications or crop the image into smaller images and retry.'})
+
+
 @app.get('/api/health')
 def health():
-    return dict(status='ok',project_directory=str(store.root.resolve()),local_only=True,compute=compute_status())
+    return dict(status='ok',application='OCLAST',project_directory=str(store.root.resolve()),local_only=True,compute=compute_status())
 
 
 @app.get('/api/projects')
@@ -50,27 +75,70 @@ def list_projects():
     return store.list()
 
 
+# One heavyweight job at a time keeps uploads/exports from multiplying the
+# full-resolution arrays held by CPU inference. Tile requests remain available.
+resource_lock = Lock()
+MAX_UPLOAD_BYTES = 512 * 1024**2
+MAX_IMAGE_PIXELS = 64_000_000
+
+
 @app.post('/api/projects',status_code=201)
-async def create_project(file: UploadFile=File(...)):
-    # Spool uploaded bytes to disk through Starlette, decode once, save one
-    # lossless source master. Reject unsupported precision instead of downcasting.
-    contents = await file.read()
-    if not contents:
-        raise HTTPException(400,'Choose a nonempty TIFF, PNG, or JPEG image.')
-    image = cv2.imdecode(np.frombuffer(contents,np.uint8),cv2.IMREAD_UNCHANGED)
-    if image is None:
-        raise HTTPException(400,'This image could not be decoded. Choose a readable TIFF, PNG, or JPEG.')
-    if image.dtype != np.uint8 or image.ndim != 3 or image.shape[2] != 3:
-        raise HTTPException(400,'This model expects a single 8-bit RGB image. Convert grayscale, 16-bit, RGBA, or stack data before analysis.')
-    return store.create(image,Path(file.filename or 'Untitled image').name,hashlib.sha256(contents).hexdigest())
+def create_project(file: UploadFile=File(...)):
+    if not resource_lock.acquire(blocking=False):
+        raise HTTPException(409,'Wait for the current image operation to finish, then try again.')
+    try:
+        # The multipart upload is already spooled. Decode from a disk file rather
+        # than retaining a second 180MB TIFF byte string alongside its pixels.
+        digest=hashlib.sha256()
+        with tempfile.TemporaryDirectory(prefix='oclast-import-') as directory:
+            path=Path(directory)/'upload'
+            size=0
+            with path.open('wb') as target:
+                while chunk := file.file.read(1024**2):
+                    size+=len(chunk)
+                    if size>MAX_UPLOAD_BYTES:
+                        raise HTTPException(413,'Image file exceeds 512 MB. Crop it into smaller images first.')
+                    digest.update(chunk)
+                    target.write(chunk)
+            if not size:
+                raise HTTPException(400,'Choose a nonempty TIFF, PNG, or JPEG image.')
+            try:
+                with Image.open(path) as header:
+                    pixels=header.width*header.height
+                    if pixels>MAX_IMAGE_PIXELS:
+                        raise HTTPException(413,'Image exceeds 64 megapixels. Crop it into smaller images first.')
+                    if getattr(header,'n_frames',1)!=1:
+                        raise HTTPException(400,'Choose a single RGB image, rather than an image stack.')
+                    require_memory(pixels*20+1536*1024**2,'import and analyze this image')
+            except (UnidentifiedImageError, OSError, Image.DecompressionBombError) as exc:
+                raise HTTPException(400,'This image could not be decoded. Choose a readable TIFF, PNG, or JPEG.') from exc
+            try:
+                image=cv2.imread(str(path),cv2.IMREAD_UNCHANGED)
+            except cv2.error as exc:
+                raise HTTPException(400,'This image could not be decoded. Choose a readable TIFF, PNG, or JPEG.') from exc
+            if image is None:
+                raise HTTPException(400,'This image could not be decoded. Choose a readable TIFF, PNG, or JPEG.')
+            if image.dtype!=np.uint8 or image.ndim!=3 or image.shape[2]!=3:
+                raise HTTPException(400,'This model expects a single 8-bit RGB image. Convert grayscale, 16-bit, RGBA, or stack data before analysis.')
+            return store.create(image,Path(file.filename or 'Untitled image').name,digest.hexdigest())
+    except MemoryError as exc:
+        raise HTTPException(413,str(exc) or 'Not enough memory. Close other applications or crop the image and retry.') from exc
+    finally:
+        file.file.close()
+        resource_lock.release()
 
 
 @app.get('/api/projects/{project_id}')
 def get_project(project_id:str):
     meta=store.get(project_id)
     folder=store.folder(project_id)
-    return dict(**meta,can_undo=(folder/'undo.npz').exists(),
-                storage_bytes=sum(p.stat().st_size for p in folder.iterdir() if p.is_file()))
+    storage_bytes=0
+    for path in folder.iterdir():
+        try:
+            if path.is_file(): storage_bytes+=path.stat().st_size
+        except FileNotFoundError:
+            pass  # Atomic saves may replace a temporary file during this scan.
+    return dict(**meta,can_undo=(folder/'undo.npz').exists(),storage_bytes=storage_bytes)
 
 
 @app.get('/api/projects/{project_id}/cells')
@@ -111,6 +179,7 @@ def analyze(project_id):
     started=time.perf_counter()
     try:
         image=store.source(project_id)
+        require_memory(image.shape[0]*image.shape[1]*17+1536*1024**2,'analyze this image')
         total=((image.shape[0]+511)//512)*((image.shape[1]+511)//512)
         store.update(project_id,status='running',stage='Predicting image tiles',total_tiles=total,started_at=time.time(),error=None)
         def progress(done,total):
@@ -118,11 +187,21 @@ def analyze(project_id):
                          elapsed_seconds=round(time.perf_counter()-started,1),compute=compute_status())
         probability=infer_image(image,progress)
         store.update(project_id,stage='Separating objects across the whole image',progress=88)
+        del image
+        store.source.cache_clear()
         labels=separate_whole_image(probability)
         store.update(project_id,stage='Saving predictions and measurements',progress=95)
         store.save_analysis(project_id,probability,labels,model_hash(),lambda:round(time.perf_counter()-started,2))
     except Exception as exc:
-        store.update(project_id,status='error',stage='Analysis failed',error=str(exc),elapsed_seconds=round(time.perf_counter()-started,1))
+        import logging
+        logging.getLogger(__name__).exception('Analysis failed for project %s',project_id)
+        message=str(exc) or ('Not enough memory. Close other applications or crop the image and retry.'
+                            if isinstance(exc,MemoryError) else 'Analysis failed. Check the diagnostic log and retry.')
+        if any(text in message.lower() for text in ('failed to allocate memory','bad_alloc','out of memory')):
+            message='Not enough memory. Close other applications or crop the image into smaller images and retry.'
+        store.mark_error(project_id,message,round(time.perf_counter()-started,1))
+    finally:
+        resource_lock.release()
 
 
 @app.post('/api/projects/{project_id}/analyze',status_code=202)
@@ -131,8 +210,14 @@ def run_analysis(project_id:str):
         meta=store.get(project_id)
         if meta['status'] not in ('ready','error','interrupted'):
             raise HTTPException(409,'This analysis is already running or saved. Create another project to run it again.')
-        store.update(project_id,status='queued',stage='Waiting for the local analysis worker',progress=0,error=None)
-        workers.submit(analyze,project_id)
+        if not resource_lock.acquire(blocking=False):
+            raise HTTPException(409,'Wait for the current image operation to finish, then try again.')
+        try:
+            store.update(project_id,status='queued',stage='Waiting for the local analysis worker',progress=0,error=None)
+            workers.submit(analyze,project_id)
+        except BaseException:
+            resource_lock.release()
+            raise
     return store.get(project_id)
 
 
@@ -232,6 +317,15 @@ def csv_data(project_id):
     return stream.getvalue().encode('utf-8-sig')
 
 
+class TemporaryArchiveResponse(FileResponse):
+    async def __call__(self, scope, receive, send):
+        try:
+            await super().__call__(scope, receive, send)
+        finally:
+            # A disconnected download may raise before a background task runs.
+            Path(self.path).unlink(missing_ok=True)
+
+
 @app.get('/api/projects/{project_id}/export/{kind}')
 def export(project_id:str,kind:str):
     meta=store.get(project_id)
@@ -239,29 +333,46 @@ def export(project_id:str,kind:str):
         raise HTTPException(409,'Finish analysis before exporting')
     if kind=='measurements.csv':
         return Response(csv_data(project_id),media_type='text/csv',headers={'Content-Disposition':'attachment; filename="oclast_measurements.csv"'})
-    buffer=io.BytesIO()
-    with store.lock,zipfile.ZipFile(buffer,'w',compression=zipfile.ZIP_DEFLATED) as archive:
-        meta=store.get(project_id)
-        labels=store.labels(project_id,meta['revision'])
-        if kind=='analysis.zip':
-            archive.writestr('project.json',json.dumps(meta,indent=2))
-            archive.writestr('measurements.csv',csv_data(project_id))
-            archive.write(store.folder(project_id)/'labels.npz','labels.npz')
-            ok,png=cv2.imencode('.png',np.uint8(labels>0)*255)
-            archive.writestr('foreground_mask.png',png.tobytes())
-        elif kind=='training.zip':
-            image=store.source(project_id)
-            for y in range(0,meta['height'],512):
-                for x in range(0,meta['width'],512):
-                    crop=image[y:y+512,x:x+512]
-                    mask=np.uint8(labels[y:y+512,x:x+512]>0)*255
-                    name=f'tile_y{y}_x{x}'
-                    archive.writestr(f'images/{name}.png',cv2.imencode('.png',crop)[1].tobytes())
-                    archive.writestr(f'masks/{name}.png',cv2.imencode('.png',mask)[1].tobytes())
-            archive.writestr('project.json',json.dumps(meta,indent=2))
-        else:
-            raise HTTPException(404,'Unknown export')
-    return Response(buffer.getvalue(),media_type='application/zip',headers={'Content-Disposition':f'attachment; filename="oclast_{kind}"'})
+    if kind not in ('analysis.zip','training.zip'):
+        raise HTTPException(404,'Unknown export')
+    if not resource_lock.acquire(blocking=False):
+        raise HTTPException(409,'Wait for the current image operation to finish, then try again.')
+    # A training ZIP can be hundreds of MB. Build on disk and stream the response;
+    # remove only this temporary export after sending it (or on build failure).
+    filename=None
+    try:
+        descriptor, filename=tempfile.mkstemp(prefix='oclast-export-',suffix='.zip')
+        os.close(descriptor)
+        with store.lock,zipfile.ZipFile(filename,'w',compression=zipfile.ZIP_DEFLATED) as archive:
+            meta=store.get(project_id)
+            labels=store.labels(project_id,meta['revision'])
+            if kind=='analysis.zip':
+                archive.writestr('project.json',json.dumps(meta,indent=2))
+                archive.writestr('measurements.csv',csv_data(project_id))
+                archive.write(store.folder(project_id)/'labels.npz','labels.npz')
+                ok,png=cv2.imencode('.png',np.uint8(labels>0)*255)
+                if not ok: raise OSError('Could not encode the foreground mask')
+                archive.writestr('foreground_mask.png',png.tobytes())
+            else:
+                image=store.source(project_id)
+                for y in range(0,meta['height'],512):
+                    for x in range(0,meta['width'],512):
+                        crop=image[y:y+512,x:x+512]
+                        mask=np.uint8(labels[y:y+512,x:x+512]>0)*255
+                        name=f'tile_y{y}_x{x}'
+                        for prefix,pixels in (('images',crop),('masks',mask)):
+                            ok,png=cv2.imencode('.png',pixels)
+                            if not ok: raise OSError('Could not encode an exported image tile')
+                            archive.writestr(f'{prefix}/{name}.png',png.tobytes())
+                archive.writestr('project.json',json.dumps(meta,indent=2))
+        return TemporaryArchiveResponse(filename,media_type='application/zip',filename=f'oclast_{kind}')
+    except BaseException:
+        if filename is not None:
+            Path(filename).unlink(missing_ok=True)
+        raise
+    finally:
+        resource_lock.release()
+
 
 
 frontend=ROOT/'frontend'/'dist'
@@ -275,19 +386,3 @@ if frontend.is_dir():
     @app.get('/')
     def index():
         return FileResponse(frontend/'index.html')
-
-if __name__=='__main__':
-    import multiprocessing
-    import threading
-    import webbrowser
-    import uvicorn
-    multiprocessing.freeze_support()
-    port=int(os.environ.get('OCLAST_PORT','8000'))
-    if not 1<=port<=65535:
-        raise ValueError('OCLAST_PORT must be between 1 and 65535')
-    print(f'OCLAST 1.3.0 — http://127.0.0.1:{port}',flush=True)
-    print(f'Saved projects: {store.root.resolve()}',flush=True)
-    print('Keep this window open while using OCLAST. Close it to stop the app.',flush=True)
-    if not os.environ.get('OCLAST_NO_BROWSER'):
-        threading.Timer(1.5,lambda:webbrowser.open(f'http://127.0.0.1:{port}')).start()
-    uvicorn.run(app,host='127.0.0.1',port=port)

@@ -1,0 +1,1616 @@
+{
+  "status": "passed",
+  "exe_sha256": "82ac9c9135e8a22a43e4b9664daa62aa17c1ae945ab749667fa3d2d937e6c3bf",
+  "image_name": "700cell_Rank75_Itaconate-VC_B10.tif",
+  "image_sha256": "b4a871a75a608cc3383af968f1d64ba0d4c05c50418e24c9986de69aa4e494cd",
+  "runs": [
+    {
+      "id": "94bf52e8-a171-4c86-881d-842d86f91976",
+      "elapsed_seconds": 794.94,
+      "wall_seconds": 795.95,
+      "count": 858,
+      "compute": {
+        "status": "active",
+        "device": "cpu",
+        "active_provider": "CPUExecutionProvider",
+        "providers_used": [
+          "CPUExecutionProvider"
+        ],
+        "available_providers": [
+          "DmlExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "gpu_device_id": null,
+        "preference": "cpu",
+        "cpu_threads": 4,
+        "fallback_events": []
+      },
+      "health_latency_max_seconds": 0.09400000001187436,
+      "health_latency_p95_seconds": 0.01600000000325963,
+      "progress": [
+        {
+          "seconds": 0.01,
+          "stage": "Waiting for the local analysis worker",
+          "tiles": 0
+        },
+        {
+          "seconds": 1.11,
+          "stage": "Predicting image tiles",
+          "tiles": 0
+        },
+        {
+          "seconds": 5.14,
+          "stage": "Predicting image tiles",
+          "tiles": 1
+        },
+        {
+          "seconds": 10.78,
+          "stage": "Predicting image tiles",
+          "tiles": 2
+        },
+        {
+          "seconds": 12.81,
+          "stage": "Predicting image tiles",
+          "tiles": 3
+        },
+        {
+          "seconds": 15.83,
+          "stage": "Predicting image tiles",
+          "tiles": 4
+        },
+        {
+          "seconds": 18.86,
+          "stage": "Predicting image tiles",
+          "tiles": 5
+        },
+        {
+          "seconds": 21.88,
+          "stage": "Predicting image tiles",
+          "tiles": 6
+        },
+        {
+          "seconds": 24.89,
+          "stage": "Predicting image tiles",
+          "tiles": 7
+        },
+        {
+          "seconds": 28.94,
+          "stage": "Predicting image tiles",
+          "tiles": 8
+        },
+        {
+          "seconds": 31.95,
+          "stage": "Predicting image tiles",
+          "tiles": 9
+        },
+        {
+          "seconds": 34.98,
+          "stage": "Predicting image tiles",
+          "tiles": 10
+        },
+        {
+          "seconds": 38.0,
+          "stage": "Predicting image tiles",
+          "tiles": 11
+        },
+        {
+          "seconds": 41.03,
+          "stage": "Predicting image tiles",
+          "tiles": 12
+        },
+        {
+          "seconds": 44.05,
+          "stage": "Predicting image tiles",
+          "tiles": 13
+        },
+        {
+          "seconds": 48.08,
+          "stage": "Predicting image tiles",
+          "tiles": 14
+        },
+        {
+          "seconds": 51.11,
+          "stage": "Predicting image tiles",
+          "tiles": 15
+        },
+        {
+          "seconds": 54.12,
+          "stage": "Predicting image tiles",
+          "tiles": 16
+        },
+        {
+          "seconds": 57.16,
+          "stage": "Predicting image tiles",
+          "tiles": 17
+        },
+        {
+          "seconds": 60.19,
+          "stage": "Predicting image tiles",
+          "tiles": 18
+        },
+        {
+          "seconds": 64.22,
+          "stage": "Predicting image tiles",
+          "tiles": 19
+        },
+        {
+          "seconds": 67.23,
+          "stage": "Predicting image tiles",
+          "tiles": 20
+        },
+        {
+          "seconds": 70.26,
+          "stage": "Predicting image tiles",
+          "tiles": 21
+        },
+        {
+          "seconds": 73.3,
+          "stage": "Predicting image tiles",
+          "tiles": 22
+        },
+        {
+          "seconds": 76.31,
+          "stage": "Predicting image tiles",
+          "tiles": 23
+        },
+        {
+          "seconds": 80.34,
+          "stage": "Predicting image tiles",
+          "tiles": 24
+        },
+        {
+          "seconds": 83.36,
+          "stage": "Predicting image tiles",
+          "tiles": 25
+        },
+        {
+          "seconds": 86.39,
+          "stage": "Predicting image tiles",
+          "tiles": 26
+        },
+        {
+          "seconds": 89.41,
+          "stage": "Predicting image tiles",
+          "tiles": 27
+        },
+        {
+          "seconds": 92.42,
+          "stage": "Predicting image tiles",
+          "tiles": 28
+        },
+        {
+          "seconds": 95.45,
+          "stage": "Predicting image tiles",
+          "tiles": 29
+        },
+        {
+          "seconds": 99.48,
+          "stage": "Predicting image tiles",
+          "tiles": 30
+        },
+        {
+          "seconds": 102.5,
+          "stage": "Predicting image tiles",
+          "tiles": 31
+        },
+        {
+          "seconds": 105.51,
+          "stage": "Predicting image tiles",
+          "tiles": 32
+        },
+        {
+          "seconds": 108.55,
+          "stage": "Predicting image tiles",
+          "tiles": 33
+        },
+        {
+          "seconds": 112.58,
+          "stage": "Predicting image tiles",
+          "tiles": 34
+        },
+        {
+          "seconds": 115.59,
+          "stage": "Predicting image tiles",
+          "tiles": 35
+        },
+        {
+          "seconds": 118.61,
+          "stage": "Predicting image tiles",
+          "tiles": 36
+        },
+        {
+          "seconds": 121.64,
+          "stage": "Predicting image tiles",
+          "tiles": 37
+        },
+        {
+          "seconds": 124.66,
+          "stage": "Predicting image tiles",
+          "tiles": 38
+        },
+        {
+          "seconds": 128.69,
+          "stage": "Predicting image tiles",
+          "tiles": 39
+        },
+        {
+          "seconds": 131.7,
+          "stage": "Predicting image tiles",
+          "tiles": 40
+        },
+        {
+          "seconds": 134.73,
+          "stage": "Predicting image tiles",
+          "tiles": 41
+        },
+        {
+          "seconds": 137.76,
+          "stage": "Predicting image tiles",
+          "tiles": 42
+        },
+        {
+          "seconds": 140.78,
+          "stage": "Predicting image tiles",
+          "tiles": 43
+        },
+        {
+          "seconds": 143.8,
+          "stage": "Predicting image tiles",
+          "tiles": 44
+        },
+        {
+          "seconds": 147.83,
+          "stage": "Predicting image tiles",
+          "tiles": 45
+        },
+        {
+          "seconds": 150.86,
+          "stage": "Predicting image tiles",
+          "tiles": 46
+        },
+        {
+          "seconds": 153.88,
+          "stage": "Predicting image tiles",
+          "tiles": 47
+        },
+        {
+          "seconds": 156.89,
+          "stage": "Predicting image tiles",
+          "tiles": 48
+        },
+        {
+          "seconds": 160.94,
+          "stage": "Predicting image tiles",
+          "tiles": 49
+        },
+        {
+          "seconds": 163.95,
+          "stage": "Predicting image tiles",
+          "tiles": 50
+        },
+        {
+          "seconds": 166.98,
+          "stage": "Predicting image tiles",
+          "tiles": 51
+        },
+        {
+          "seconds": 170.0,
+          "stage": "Predicting image tiles",
+          "tiles": 52
+        },
+        {
+          "seconds": 174.05,
+          "stage": "Predicting image tiles",
+          "tiles": 53
+        },
+        {
+          "seconds": 177.06,
+          "stage": "Predicting image tiles",
+          "tiles": 54
+        },
+        {
+          "seconds": 180.09,
+          "stage": "Predicting image tiles",
+          "tiles": 55
+        },
+        {
+          "seconds": 183.12,
+          "stage": "Predicting image tiles",
+          "tiles": 56
+        },
+        {
+          "seconds": 187.16,
+          "stage": "Predicting image tiles",
+          "tiles": 57
+        },
+        {
+          "seconds": 190.17,
+          "stage": "Predicting image tiles",
+          "tiles": 58
+        },
+        {
+          "seconds": 193.2,
+          "stage": "Predicting image tiles",
+          "tiles": 59
+        },
+        {
+          "seconds": 196.22,
+          "stage": "Predicting image tiles",
+          "tiles": 60
+        },
+        {
+          "seconds": 199.25,
+          "stage": "Predicting image tiles",
+          "tiles": 61
+        },
+        {
+          "seconds": 203.28,
+          "stage": "Predicting image tiles",
+          "tiles": 62
+        },
+        {
+          "seconds": 206.3,
+          "stage": "Predicting image tiles",
+          "tiles": 63
+        },
+        {
+          "seconds": 209.31,
+          "stage": "Predicting image tiles",
+          "tiles": 64
+        },
+        {
+          "seconds": 212.34,
+          "stage": "Predicting image tiles",
+          "tiles": 65
+        },
+        {
+          "seconds": 216.38,
+          "stage": "Predicting image tiles",
+          "tiles": 66
+        },
+        {
+          "seconds": 219.39,
+          "stage": "Predicting image tiles",
+          "tiles": 67
+        },
+        {
+          "seconds": 222.42,
+          "stage": "Predicting image tiles",
+          "tiles": 68
+        },
+        {
+          "seconds": 225.44,
+          "stage": "Predicting image tiles",
+          "tiles": 69
+        },
+        {
+          "seconds": 228.45,
+          "stage": "Predicting image tiles",
+          "tiles": 70
+        },
+        {
+          "seconds": 231.48,
+          "stage": "Predicting image tiles",
+          "tiles": 71
+        },
+        {
+          "seconds": 235.51,
+          "stage": "Predicting image tiles",
+          "tiles": 72
+        },
+        {
+          "seconds": 238.53,
+          "stage": "Predicting image tiles",
+          "tiles": 73
+        },
+        {
+          "seconds": 241.56,
+          "stage": "Predicting image tiles",
+          "tiles": 74
+        },
+        {
+          "seconds": 245.59,
+          "stage": "Predicting image tiles",
+          "tiles": 75
+        },
+        {
+          "seconds": 248.62,
+          "stage": "Predicting image tiles",
+          "tiles": 76
+        },
+        {
+          "seconds": 253.66,
+          "stage": "Predicting image tiles",
+          "tiles": 77
+        },
+        {
+          "seconds": 257.7,
+          "stage": "Predicting image tiles",
+          "tiles": 78
+        },
+        {
+          "seconds": 261.73,
+          "stage": "Predicting image tiles",
+          "tiles": 79
+        },
+        {
+          "seconds": 264.76,
+          "stage": "Predicting image tiles",
+          "tiles": 80
+        },
+        {
+          "seconds": 268.8,
+          "stage": "Predicting image tiles",
+          "tiles": 81
+        },
+        {
+          "seconds": 271.83,
+          "stage": "Predicting image tiles",
+          "tiles": 82
+        },
+        {
+          "seconds": 274.84,
+          "stage": "Predicting image tiles",
+          "tiles": 83
+        },
+        {
+          "seconds": 278.88,
+          "stage": "Predicting image tiles",
+          "tiles": 84
+        },
+        {
+          "seconds": 281.89,
+          "stage": "Predicting image tiles",
+          "tiles": 85
+        },
+        {
+          "seconds": 284.92,
+          "stage": "Predicting image tiles",
+          "tiles": 86
+        },
+        {
+          "seconds": 288.95,
+          "stage": "Predicting image tiles",
+          "tiles": 87
+        },
+        {
+          "seconds": 291.97,
+          "stage": "Predicting image tiles",
+          "tiles": 88
+        },
+        {
+          "seconds": 295.0,
+          "stage": "Predicting image tiles",
+          "tiles": 89
+        },
+        {
+          "seconds": 299.03,
+          "stage": "Predicting image tiles",
+          "tiles": 90
+        },
+        {
+          "seconds": 302.06,
+          "stage": "Predicting image tiles",
+          "tiles": 91
+        },
+        {
+          "seconds": 305.08,
+          "stage": "Predicting image tiles",
+          "tiles": 92
+        },
+        {
+          "seconds": 309.14,
+          "stage": "Predicting image tiles",
+          "tiles": 93
+        },
+        {
+          "seconds": 312.16,
+          "stage": "Predicting image tiles",
+          "tiles": 94
+        },
+        {
+          "seconds": 316.19,
+          "stage": "Predicting image tiles",
+          "tiles": 95
+        },
+        {
+          "seconds": 319.22,
+          "stage": "Predicting image tiles",
+          "tiles": 96
+        },
+        {
+          "seconds": 322.25,
+          "stage": "Predicting image tiles",
+          "tiles": 97
+        },
+        {
+          "seconds": 326.28,
+          "stage": "Predicting image tiles",
+          "tiles": 98
+        },
+        {
+          "seconds": 329.31,
+          "stage": "Predicting image tiles",
+          "tiles": 99
+        },
+        {
+          "seconds": 332.33,
+          "stage": "Predicting image tiles",
+          "tiles": 100
+        },
+        {
+          "seconds": 336.36,
+          "stage": "Predicting image tiles",
+          "tiles": 101
+        },
+        {
+          "seconds": 339.39,
+          "stage": "Predicting image tiles",
+          "tiles": 102
+        },
+        {
+          "seconds": 342.41,
+          "stage": "Predicting image tiles",
+          "tiles": 103
+        },
+        {
+          "seconds": 346.45,
+          "stage": "Predicting image tiles",
+          "tiles": 104
+        },
+        {
+          "seconds": 349.48,
+          "stage": "Predicting image tiles",
+          "tiles": 105
+        },
+        {
+          "seconds": 352.5,
+          "stage": "Predicting image tiles",
+          "tiles": 106
+        },
+        {
+          "seconds": 356.53,
+          "stage": "Predicting image tiles",
+          "tiles": 107
+        },
+        {
+          "seconds": 359.55,
+          "stage": "Predicting image tiles",
+          "tiles": 108
+        },
+        {
+          "seconds": 362.58,
+          "stage": "Predicting image tiles",
+          "tiles": 109
+        },
+        {
+          "seconds": 366.61,
+          "stage": "Predicting image tiles",
+          "tiles": 110
+        },
+        {
+          "seconds": 369.62,
+          "stage": "Predicting image tiles",
+          "tiles": 111
+        },
+        {
+          "seconds": 373.66,
+          "stage": "Predicting image tiles",
+          "tiles": 112
+        },
+        {
+          "seconds": 377.69,
+          "stage": "Predicting image tiles",
+          "tiles": 113
+        },
+        {
+          "seconds": 381.72,
+          "stage": "Predicting image tiles",
+          "tiles": 114
+        },
+        {
+          "seconds": 384.73,
+          "stage": "Predicting image tiles",
+          "tiles": 115
+        },
+        {
+          "seconds": 387.76,
+          "stage": "Predicting image tiles",
+          "tiles": 116
+        },
+        {
+          "seconds": 390.78,
+          "stage": "Predicting image tiles",
+          "tiles": 117
+        },
+        {
+          "seconds": 393.81,
+          "stage": "Predicting image tiles",
+          "tiles": 118
+        },
+        {
+          "seconds": 397.84,
+          "stage": "Predicting image tiles",
+          "tiles": 119
+        },
+        {
+          "seconds": 400.86,
+          "stage": "Predicting image tiles",
+          "tiles": 120
+        },
+        {
+          "seconds": 403.88,
+          "stage": "Predicting image tiles",
+          "tiles": 121
+        },
+        {
+          "seconds": 407.92,
+          "stage": "Predicting image tiles",
+          "tiles": 122
+        },
+        {
+          "seconds": 410.94,
+          "stage": "Predicting image tiles",
+          "tiles": 123
+        },
+        {
+          "seconds": 414.97,
+          "stage": "Predicting image tiles",
+          "tiles": 124
+        },
+        {
+          "seconds": 418.01,
+          "stage": "Predicting image tiles",
+          "tiles": 125
+        },
+        {
+          "seconds": 421.03,
+          "stage": "Predicting image tiles",
+          "tiles": 126
+        },
+        {
+          "seconds": 425.06,
+          "stage": "Predicting image tiles",
+          "tiles": 127
+        },
+        {
+          "seconds": 428.09,
+          "stage": "Predicting image tiles",
+          "tiles": 128
+        },
+        {
+          "seconds": 431.12,
+          "stage": "Predicting image tiles",
+          "tiles": 129
+        },
+        {
+          "seconds": 434.16,
+          "stage": "Predicting image tiles",
+          "tiles": 130
+        },
+        {
+          "seconds": 438.2,
+          "stage": "Predicting image tiles",
+          "tiles": 131
+        },
+        {
+          "seconds": 441.22,
+          "stage": "Predicting image tiles",
+          "tiles": 132
+        },
+        {
+          "seconds": 444.25,
+          "stage": "Predicting image tiles",
+          "tiles": 133
+        },
+        {
+          "seconds": 447.26,
+          "stage": "Predicting image tiles",
+          "tiles": 134
+        },
+        {
+          "seconds": 451.3,
+          "stage": "Predicting image tiles",
+          "tiles": 135
+        },
+        {
+          "seconds": 454.33,
+          "stage": "Predicting image tiles",
+          "tiles": 136
+        },
+        {
+          "seconds": 457.34,
+          "stage": "Predicting image tiles",
+          "tiles": 137
+        },
+        {
+          "seconds": 460.36,
+          "stage": "Predicting image tiles",
+          "tiles": 138
+        },
+        {
+          "seconds": 463.39,
+          "stage": "Predicting image tiles",
+          "tiles": 139
+        },
+        {
+          "seconds": 465.39,
+          "stage": "Predicting image tiles",
+          "tiles": 140
+        },
+        {
+          "seconds": 468.42,
+          "stage": "Predicting image tiles",
+          "tiles": 141
+        },
+        {
+          "seconds": 470.44,
+          "stage": "Predicting image tiles",
+          "tiles": 142
+        },
+        {
+          "seconds": 473.45,
+          "stage": "Predicting image tiles",
+          "tiles": 143
+        },
+        {
+          "seconds": 475.47,
+          "stage": "Predicting image tiles",
+          "tiles": 144
+        },
+        {
+          "seconds": 478.48,
+          "stage": "Predicting image tiles",
+          "tiles": 145
+        },
+        {
+          "seconds": 481.5,
+          "stage": "Predicting image tiles",
+          "tiles": 146
+        },
+        {
+          "seconds": 483.51,
+          "stage": "Predicting image tiles",
+          "tiles": 147
+        },
+        {
+          "seconds": 486.55,
+          "stage": "Predicting image tiles",
+          "tiles": 148
+        },
+        {
+          "seconds": 488.56,
+          "stage": "Predicting image tiles",
+          "tiles": 149
+        },
+        {
+          "seconds": 491.59,
+          "stage": "Predicting image tiles",
+          "tiles": 150
+        },
+        {
+          "seconds": 494.62,
+          "stage": "Predicting image tiles",
+          "tiles": 151
+        },
+        {
+          "seconds": 496.62,
+          "stage": "Predicting image tiles",
+          "tiles": 152
+        },
+        {
+          "seconds": 499.66,
+          "stage": "Predicting image tiles",
+          "tiles": 153
+        },
+        {
+          "seconds": 502.67,
+          "stage": "Predicting image tiles",
+          "tiles": 154
+        },
+        {
+          "seconds": 504.69,
+          "stage": "Predicting image tiles",
+          "tiles": 155
+        },
+        {
+          "seconds": 507.72,
+          "stage": "Predicting image tiles",
+          "tiles": 156
+        },
+        {
+          "seconds": 509.75,
+          "stage": "Predicting image tiles",
+          "tiles": 157
+        },
+        {
+          "seconds": 512.76,
+          "stage": "Predicting image tiles",
+          "tiles": 158
+        },
+        {
+          "seconds": 514.78,
+          "stage": "Predicting image tiles",
+          "tiles": 159
+        },
+        {
+          "seconds": 517.83,
+          "stage": "Predicting image tiles",
+          "tiles": 160
+        },
+        {
+          "seconds": 520.86,
+          "stage": "Predicting image tiles",
+          "tiles": 161
+        },
+        {
+          "seconds": 523.88,
+          "stage": "Predicting image tiles",
+          "tiles": 162
+        },
+        {
+          "seconds": 525.89,
+          "stage": "Predicting image tiles",
+          "tiles": 163
+        },
+        {
+          "seconds": 528.92,
+          "stage": "Predicting image tiles",
+          "tiles": 164
+        },
+        {
+          "seconds": 530.94,
+          "stage": "Predicting image tiles",
+          "tiles": 165
+        },
+        {
+          "seconds": 533.95,
+          "stage": "Predicting image tiles",
+          "tiles": 166
+        },
+        {
+          "seconds": 536.97,
+          "stage": "Predicting image tiles",
+          "tiles": 167
+        },
+        {
+          "seconds": 538.98,
+          "stage": "Predicting image tiles",
+          "tiles": 168
+        },
+        {
+          "seconds": 542.01,
+          "stage": "Predicting image tiles",
+          "tiles": 169
+        },
+        {
+          "seconds": 544.03,
+          "stage": "Predicting image tiles",
+          "tiles": 170
+        },
+        {
+          "seconds": 548.06,
+          "stage": "Predicting image tiles",
+          "tiles": 171
+        },
+        {
+          "seconds": 551.11,
+          "stage": "Predicting image tiles",
+          "tiles": 172
+        },
+        {
+          "seconds": 554.12,
+          "stage": "Predicting image tiles",
+          "tiles": 173
+        },
+        {
+          "seconds": 557.16,
+          "stage": "Predicting image tiles",
+          "tiles": 174
+        },
+        {
+          "seconds": 560.17,
+          "stage": "Predicting image tiles",
+          "tiles": 175
+        },
+        {
+          "seconds": 563.2,
+          "stage": "Predicting image tiles",
+          "tiles": 176
+        },
+        {
+          "seconds": 565.22,
+          "stage": "Predicting image tiles",
+          "tiles": 177
+        },
+        {
+          "seconds": 568.25,
+          "stage": "Predicting image tiles",
+          "tiles": 178
+        },
+        {
+          "seconds": 571.26,
+          "stage": "Predicting image tiles",
+          "tiles": 179
+        },
+        {
+          "seconds": 574.3,
+          "stage": "Predicting image tiles",
+          "tiles": 180
+        },
+        {
+          "seconds": 576.31,
+          "stage": "Predicting image tiles",
+          "tiles": 181
+        },
+        {
+          "seconds": 579.33,
+          "stage": "Predicting image tiles",
+          "tiles": 182
+        },
+        {
+          "seconds": 582.36,
+          "stage": "Predicting image tiles",
+          "tiles": 183
+        },
+        {
+          "seconds": 584.38,
+          "stage": "Predicting image tiles",
+          "tiles": 184
+        },
+        {
+          "seconds": 587.39,
+          "stage": "Predicting image tiles",
+          "tiles": 185
+        },
+        {
+          "seconds": 590.42,
+          "stage": "Predicting image tiles",
+          "tiles": 186
+        },
+        {
+          "seconds": 592.42,
+          "stage": "Predicting image tiles",
+          "tiles": 187
+        },
+        {
+          "seconds": 595.45,
+          "stage": "Predicting image tiles",
+          "tiles": 188
+        },
+        {
+          "seconds": 598.47,
+          "stage": "Predicting image tiles",
+          "tiles": 189
+        },
+        {
+          "seconds": 600.48,
+          "stage": "Predicting image tiles",
+          "tiles": 190
+        },
+        {
+          "seconds": 603.51,
+          "stage": "Predicting image tiles",
+          "tiles": 191
+        },
+        {
+          "seconds": 606.53,
+          "stage": "Predicting image tiles",
+          "tiles": 192
+        },
+        {
+          "seconds": 608.55,
+          "stage": "Predicting image tiles",
+          "tiles": 193
+        },
+        {
+          "seconds": 611.58,
+          "stage": "Predicting image tiles",
+          "tiles": 194
+        },
+        {
+          "seconds": 614.59,
+          "stage": "Predicting image tiles",
+          "tiles": 195
+        },
+        {
+          "seconds": 617.62,
+          "stage": "Predicting image tiles",
+          "tiles": 196
+        },
+        {
+          "seconds": 620.66,
+          "stage": "Predicting image tiles",
+          "tiles": 197
+        },
+        {
+          "seconds": 623.67,
+          "stage": "Predicting image tiles",
+          "tiles": 198
+        },
+        {
+          "seconds": 626.69,
+          "stage": "Predicting image tiles",
+          "tiles": 199
+        },
+        {
+          "seconds": 629.72,
+          "stage": "Predicting image tiles",
+          "tiles": 200
+        },
+        {
+          "seconds": 631.73,
+          "stage": "Predicting image tiles",
+          "tiles": 201
+        },
+        {
+          "seconds": 634.76,
+          "stage": "Predicting image tiles",
+          "tiles": 202
+        },
+        {
+          "seconds": 637.78,
+          "stage": "Predicting image tiles",
+          "tiles": 203
+        },
+        {
+          "seconds": 640.81,
+          "stage": "Predicting image tiles",
+          "tiles": 204
+        },
+        {
+          "seconds": 644.83,
+          "stage": "Predicting image tiles",
+          "tiles": 205
+        },
+        {
+          "seconds": 647.86,
+          "stage": "Predicting image tiles",
+          "tiles": 206
+        },
+        {
+          "seconds": 650.88,
+          "stage": "Predicting image tiles",
+          "tiles": 207
+        },
+        {
+          "seconds": 653.91,
+          "stage": "Predicting image tiles",
+          "tiles": 208
+        },
+        {
+          "seconds": 657.94,
+          "stage": "Predicting image tiles",
+          "tiles": 209
+        },
+        {
+          "seconds": 660.97,
+          "stage": "Predicting image tiles",
+          "tiles": 210
+        },
+        {
+          "seconds": 665.0,
+          "stage": "Predicting image tiles",
+          "tiles": 211
+        },
+        {
+          "seconds": 668.03,
+          "stage": "Predicting image tiles",
+          "tiles": 212
+        },
+        {
+          "seconds": 671.05,
+          "stage": "Predicting image tiles",
+          "tiles": 213
+        },
+        {
+          "seconds": 675.08,
+          "stage": "Predicting image tiles",
+          "tiles": 214
+        },
+        {
+          "seconds": 678.11,
+          "stage": "Predicting image tiles",
+          "tiles": 215
+        },
+        {
+          "seconds": 681.12,
+          "stage": "Predicting image tiles",
+          "tiles": 216
+        },
+        {
+          "seconds": 685.17,
+          "stage": "Predicting image tiles",
+          "tiles": 217
+        },
+        {
+          "seconds": 688.19,
+          "stage": "Predicting image tiles",
+          "tiles": 218
+        },
+        {
+          "seconds": 692.22,
+          "stage": "Predicting image tiles",
+          "tiles": 219
+        },
+        {
+          "seconds": 695.25,
+          "stage": "Predicting image tiles",
+          "tiles": 220
+        },
+        {
+          "seconds": 698.28,
+          "stage": "Predicting image tiles",
+          "tiles": 221
+        },
+        {
+          "seconds": 702.31,
+          "stage": "Predicting image tiles",
+          "tiles": 222
+        },
+        {
+          "seconds": 705.33,
+          "stage": "Predicting image tiles",
+          "tiles": 223
+        },
+        {
+          "seconds": 708.36,
+          "stage": "Predicting image tiles",
+          "tiles": 224
+        },
+        {
+          "seconds": 712.39,
+          "stage": "Predicting image tiles",
+          "tiles": 225
+        },
+        {
+          "seconds": 715.42,
+          "stage": "Predicting image tiles",
+          "tiles": 226
+        },
+        {
+          "seconds": 719.45,
+          "stage": "Predicting image tiles",
+          "tiles": 227
+        },
+        {
+          "seconds": 722.47,
+          "stage": "Predicting image tiles",
+          "tiles": 228
+        },
+        {
+          "seconds": 725.5,
+          "stage": "Predicting image tiles",
+          "tiles": 229
+        },
+        {
+          "seconds": 729.53,
+          "stage": "Predicting image tiles",
+          "tiles": 230
+        },
+        {
+          "seconds": 732.56,
+          "stage": "Predicting image tiles",
+          "tiles": 231
+        },
+        {
+          "seconds": 736.59,
+          "stage": "Predicting image tiles",
+          "tiles": 232
+        },
+        {
+          "seconds": 739.61,
+          "stage": "Predicting image tiles",
+          "tiles": 233
+        },
+        {
+          "seconds": 742.64,
+          "stage": "Predicting image tiles",
+          "tiles": 234
+        },
+        {
+          "seconds": 746.66,
+          "stage": "Predicting image tiles",
+          "tiles": 235
+        },
+        {
+          "seconds": 749.69,
+          "stage": "Predicting image tiles",
+          "tiles": 236
+        },
+        {
+          "seconds": 752.72,
+          "stage": "Predicting image tiles",
+          "tiles": 237
+        },
+        {
+          "seconds": 755.75,
+          "stage": "Predicting image tiles",
+          "tiles": 238
+        },
+        {
+          "seconds": 759.78,
+          "stage": "Predicting image tiles",
+          "tiles": 239
+        },
+        {
+          "seconds": 762.8,
+          "stage": "Separating objects across the whole image",
+          "tiles": 240
+        },
+        {
+          "seconds": 765.83,
+          "stage": "Saving predictions and measurements",
+          "tiles": 240
+        },
+        {
+          "seconds": 795.95,
+          "stage": "Analysis complete",
+          "tiles": 240
+        }
+      ],
+      "settled_memory": {
+        "tree_working_bytes": 1235705856,
+        "tree_private_bytes": 1703469056,
+        "largest_process_peak_commit_bytes": 2390904832,
+        "processes": [
+          {
+            "pid": 34736,
+            "working_bytes": 1218846720,
+            "private_bytes": 1700827136,
+            "affinity_mask": 15
+          },
+          {
+            "pid": 42464,
+            "working_bytes": 8077312,
+            "private_bytes": 1208320,
+            "affinity_mask": 15
+          },
+          {
+            "pid": 43368,
+            "working_bytes": 8781824,
+            "private_bytes": 1433600,
+            "affinity_mask": 15
+          }
+        ]
+      }
+    },
+    {
+      "id": "10f2a5fe-76db-4ea2-808b-9e4baea248ce",
+      "elapsed_seconds": 11.35,
+      "wall_seconds": 12.11,
+      "count": 28,
+      "compute": {
+        "status": "active",
+        "device": "cpu",
+        "active_provider": "CPUExecutionProvider",
+        "providers_used": [
+          "CPUExecutionProvider"
+        ],
+        "available_providers": [
+          "DmlExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "gpu_device_id": null,
+        "preference": "cpu",
+        "cpu_threads": 4,
+        "fallback_events": []
+      },
+      "health_latency_max_seconds": 0.01600000000325963,
+      "health_latency_p95_seconds": 0.01600000000325963,
+      "progress": [
+        {
+          "seconds": 0.02,
+          "stage": "Waiting for the local analysis worker",
+          "tiles": 0
+        },
+        {
+          "seconds": 1.02,
+          "stage": "Predicting image tiles",
+          "tiles": 0
+        },
+        {
+          "seconds": 3.03,
+          "stage": "Predicting image tiles",
+          "tiles": 1
+        },
+        {
+          "seconds": 6.06,
+          "stage": "Predicting image tiles",
+          "tiles": 2
+        },
+        {
+          "seconds": 8.08,
+          "stage": "Predicting image tiles",
+          "tiles": 3
+        },
+        {
+          "seconds": 11.09,
+          "stage": "Saving predictions and measurements",
+          "tiles": 4
+        },
+        {
+          "seconds": 12.11,
+          "stage": "Analysis complete",
+          "tiles": 4
+        }
+      ],
+      "settled_memory": {
+        "tree_working_bytes": 1231757312,
+        "tree_private_bytes": 1699160064,
+        "largest_process_peak_commit_bytes": 2488635392,
+        "processes": [
+          {
+            "pid": 34736,
+            "working_bytes": 1214898176,
+            "private_bytes": 1696518144,
+            "affinity_mask": 15
+          },
+          {
+            "pid": 42464,
+            "working_bytes": 8077312,
+            "private_bytes": 1208320,
+            "affinity_mask": 15
+          },
+          {
+            "pid": 43368,
+            "working_bytes": 8781824,
+            "private_bytes": 1433600,
+            "affinity_mask": 15
+          }
+        ]
+      },
+      "labels_sha256": "bee4d3bdcd200d4e9f79d8285e10d68fbc81a7bc774ceca8c75b0e98e000edbc",
+      "probability_sha256": "957ad115aa6a1a8f35ac782807a6aba9d7daafad96f320e17446e77fe222cefc"
+    },
+    {
+      "id": "769f4dee-7708-413c-b8ff-1f9932f863bb",
+      "elapsed_seconds": 11.49,
+      "wall_seconds": 12.09,
+      "count": 28,
+      "compute": {
+        "status": "active",
+        "device": "cpu",
+        "active_provider": "CPUExecutionProvider",
+        "providers_used": [
+          "CPUExecutionProvider"
+        ],
+        "available_providers": [
+          "DmlExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "gpu_device_id": null,
+        "preference": "cpu",
+        "cpu_threads": 4,
+        "fallback_events": []
+      },
+      "health_latency_max_seconds": 0.01600000000325963,
+      "health_latency_p95_seconds": 0.015400000000954605,
+      "progress": [
+        {
+          "seconds": 0.0,
+          "stage": "Waiting for the local analysis worker",
+          "tiles": 0
+        },
+        {
+          "seconds": 1.02,
+          "stage": "Predicting image tiles",
+          "tiles": 0
+        },
+        {
+          "seconds": 3.02,
+          "stage": "Predicting image tiles",
+          "tiles": 1
+        },
+        {
+          "seconds": 6.05,
+          "stage": "Predicting image tiles",
+          "tiles": 2
+        },
+        {
+          "seconds": 9.08,
+          "stage": "Predicting image tiles",
+          "tiles": 3
+        },
+        {
+          "seconds": 11.08,
+          "stage": "Saving predictions and measurements",
+          "tiles": 4
+        },
+        {
+          "seconds": 12.09,
+          "stage": "Analysis complete",
+          "tiles": 4
+        }
+      ],
+      "settled_memory": {
+        "tree_working_bytes": 1237241856,
+        "tree_private_bytes": 1705222144,
+        "largest_process_peak_commit_bytes": 2488635392,
+        "processes": [
+          {
+            "pid": 34736,
+            "working_bytes": 1220382720,
+            "private_bytes": 1702580224,
+            "affinity_mask": 15
+          },
+          {
+            "pid": 42464,
+            "working_bytes": 8077312,
+            "private_bytes": 1208320,
+            "affinity_mask": 15
+          },
+          {
+            "pid": 43368,
+            "working_bytes": 8781824,
+            "private_bytes": 1433600,
+            "affinity_mask": 15
+          }
+        ]
+      },
+      "labels_sha256": "bee4d3bdcd200d4e9f79d8285e10d68fbc81a7bc774ceca8c75b0e98e000edbc",
+      "probability_sha256": "957ad115aa6a1a8f35ac782807a6aba9d7daafad96f320e17446e77fe222cefc"
+    },
+    {
+      "id": "ea930ff2-b624-497f-a853-e98692c90014",
+      "elapsed_seconds": 11.3,
+      "wall_seconds": 12.09,
+      "count": 28,
+      "compute": {
+        "status": "active",
+        "device": "cpu",
+        "active_provider": "CPUExecutionProvider",
+        "providers_used": [
+          "CPUExecutionProvider"
+        ],
+        "available_providers": [
+          "DmlExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "gpu_device_id": null,
+        "preference": "cpu",
+        "cpu_threads": 4,
+        "fallback_events": []
+      },
+      "health_latency_max_seconds": 0.01600000000325963,
+      "health_latency_p95_seconds": 0.015400000000954605,
+      "progress": [
+        {
+          "seconds": 0.01,
+          "stage": "Waiting for the local analysis worker",
+          "tiles": 0
+        },
+        {
+          "seconds": 1.01,
+          "stage": "Predicting image tiles",
+          "tiles": 0
+        },
+        {
+          "seconds": 3.03,
+          "stage": "Predicting image tiles",
+          "tiles": 1
+        },
+        {
+          "seconds": 6.06,
+          "stage": "Predicting image tiles",
+          "tiles": 2
+        },
+        {
+          "seconds": 8.06,
+          "stage": "Predicting image tiles",
+          "tiles": 3
+        },
+        {
+          "seconds": 11.09,
+          "stage": "Saving predictions and measurements",
+          "tiles": 4
+        },
+        {
+          "seconds": 12.09,
+          "stage": "Analysis complete",
+          "tiles": 4
+        }
+      ],
+      "settled_memory": {
+        "tree_working_bytes": 1232683008,
+        "tree_private_bytes": 1700032512,
+        "largest_process_peak_commit_bytes": 2488635392,
+        "processes": [
+          {
+            "pid": 34736,
+            "working_bytes": 1215823872,
+            "private_bytes": 1697390592,
+            "affinity_mask": 15
+          },
+          {
+            "pid": 42464,
+            "working_bytes": 8077312,
+            "private_bytes": 1208320,
+            "affinity_mask": 15
+          },
+          {
+            "pid": 43368,
+            "working_bytes": 8781824,
+            "private_bytes": 1433600,
+            "affinity_mask": 15
+          }
+        ]
+      },
+      "labels_sha256": "bee4d3bdcd200d4e9f79d8285e10d68fbc81a7bc774ceca8c75b0e98e000edbc",
+      "probability_sha256": "957ad115aa6a1a8f35ac782807a6aba9d7daafad96f320e17446e77fe222cefc"
+    }
+  ],
+  "limitations": [
+    "CPU affinity and process commit limits emulate constraints, not a particular laptop CPU or total system RAM."
+  ],
+  "constraints": {
+    "enforced": true,
+    "logical_cpus": 4,
+    "affinity_mask": 15,
+    "per_process_commit_limit_bytes": 4294967296,
+    "scope": "JobObject inherited by frozen child process; not a whole-machine RAM simulation"
+  },
+  "startup_memory": [
+    {
+      "tree_working_bytes": 135487488,
+      "tree_private_bytes": 91881472,
+      "largest_process_peak_commit_bytes": 89124864,
+      "processes": [
+        {
+          "pid": 34736,
+          "working_bytes": 118792192,
+          "private_bytes": 89124864,
+          "affinity_mask": 15
+        },
+        {
+          "pid": 42464,
+          "working_bytes": 7999488,
+          "private_bytes": 1224704,
+          "affinity_mask": 15
+        },
+        {
+          "pid": 43368,
+          "working_bytes": 8695808,
+          "private_bytes": 1531904,
+          "affinity_mask": 15
+        }
+      ]
+    },
+    {
+      "tree_working_bytes": 135901184,
+      "tree_private_bytes": 92409856,
+      "largest_process_peak_commit_bytes": 89661440,
+      "processes": [
+        {
+          "pid": 39792,
+          "working_bytes": 8679424,
+          "private_bytes": 1519616,
+          "affinity_mask": 15
+        },
+        {
+          "pid": 44552,
+          "working_bytes": 7999488,
+          "private_bytes": 1228800,
+          "affinity_mask": 15
+        },
+        {
+          "pid": 44788,
+          "working_bytes": 119222272,
+          "private_bytes": 89661440,
+          "affinity_mask": 15
+        }
+      ]
+    }
+  ],
+  "duplicate_during_inference": "passed",
+  "full_image_tiles_csv_analysis_bundle": "passed",
+  "repeated_crop_labels_measurements_probability": "passed",
+  "crop_private_memory_change_first_to_third_bytes": 872448,
+  "restart_preserves_full_image_csv_and_cells": "passed",
+  "memory": {
+    "tree_working_bytes": 1902190592,
+    "tree_private_bytes": 2389540864,
+    "largest_process_peak_commit_bytes": 2488635392,
+    "sample_count": 1611
+  }
+}

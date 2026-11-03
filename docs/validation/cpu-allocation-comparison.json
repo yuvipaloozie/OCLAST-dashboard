@@ -1,0 +1,327 @@
+{
+  "note": "Isolated eight-run candidate sessions on four identical V9 real TIFF tensors, two passes each, four CPU inference threads. Timings may be affected by simultaneous packaging stress tests; not a laptop guarantee. No production options changed.",
+  "results": [
+    {
+      "mode": "default",
+      "baseline_memory_mib": {
+        "WorkingSetSize": 55.07,
+        "PeakWorkingSetSize": 55.07,
+        "PagefileUsage": 515.77,
+        "PeakPagefileUsage": 515.77,
+        "PrivateUsage": 515.77
+      },
+      "opencv_threads": 16,
+      "openblas_env": null,
+      "session_seconds": 0.1052,
+      "runs": [
+        {
+          "seconds": 2.5653,
+          "memory_mib": {
+            "WorkingSetSize": 1088.76,
+            "PeakWorkingSetSize": 1089.76,
+            "PagefileUsage": 2018.63,
+            "PeakPagefileUsage": 2019.66,
+            "PrivateUsage": 2018.63
+          }
+        },
+        {
+          "seconds": 2.2013,
+          "memory_mib": {
+            "WorkingSetSize": 1991.77,
+            "PeakWorkingSetSize": 1992.77,
+            "PagefileUsage": 3076.7,
+            "PeakPagefileUsage": 3077.71,
+            "PrivateUsage": 3076.7
+          }
+        },
+        {
+          "seconds": 2.2558,
+          "memory_mib": {
+            "WorkingSetSize": 1991.77,
+            "PeakWorkingSetSize": 1992.77,
+            "PagefileUsage": 3076.7,
+            "PeakPagefileUsage": 3077.77,
+            "PrivateUsage": 3076.7
+          }
+        },
+        {
+          "seconds": 2.1173,
+          "memory_mib": {
+            "WorkingSetSize": 1991.78,
+            "PeakWorkingSetSize": 1992.78,
+            "PagefileUsage": 3076.7,
+            "PeakPagefileUsage": 3077.77,
+            "PrivateUsage": 3076.7
+          }
+        },
+        {
+          "seconds": 2.2257,
+          "memory_mib": {
+            "WorkingSetSize": 1991.79,
+            "PeakWorkingSetSize": 1992.79,
+            "PagefileUsage": 3076.7,
+            "PeakPagefileUsage": 3077.77,
+            "PrivateUsage": 3076.7
+          }
+        },
+        {
+          "seconds": 2.2645,
+          "memory_mib": {
+            "WorkingSetSize": 1991.79,
+            "PeakWorkingSetSize": 1992.79,
+            "PagefileUsage": 3076.7,
+            "PeakPagefileUsage": 3077.77,
+            "PrivateUsage": 3076.7
+          }
+        },
+        {
+          "seconds": 2.1276,
+          "memory_mib": {
+            "WorkingSetSize": 1991.79,
+            "PeakWorkingSetSize": 1992.79,
+            "PagefileUsage": 3076.7,
+            "PeakPagefileUsage": 3077.77,
+            "PrivateUsage": 3076.7
+          }
+        },
+        {
+          "seconds": 2.228,
+          "memory_mib": {
+            "WorkingSetSize": 1991.8,
+            "PeakWorkingSetSize": 1992.8,
+            "PagefileUsage": 3076.7,
+            "PeakPagefileUsage": 3077.77,
+            "PrivateUsage": 3076.7
+          }
+        }
+      ],
+      "output_hash": "1d6746bd1aeedfa768cf2c1f6a1c12ebdea40181deeaff6b82318ce46e41b6ff",
+      "per_crop_hashes": [
+        "131edd673e2882c0d1c5d238e82f08b39e87fffb1e8ade6a674499e575df4d66",
+        "f0c0e46f43200cb607854e321021d6498d3aa96e6a9ebd855878b8287cd5c7b1",
+        "3d6ad78a01d409d3ca099dbef91bc785a2cee5b00e389c01ac0be7d54d7637d2",
+        "79f0175b3665218f726676255d1f871dbe6440451a7a2034378d17fc7f5c4847",
+        "131edd673e2882c0d1c5d238e82f08b39e87fffb1e8ade6a674499e575df4d66",
+        "f0c0e46f43200cb607854e321021d6498d3aa96e6a9ebd855878b8287cd5c7b1",
+        "3d6ad78a01d409d3ca099dbef91bc785a2cee5b00e389c01ac0be7d54d7637d2",
+        "79f0175b3665218f726676255d1f871dbe6440451a7a2034378d17fc7f5c4847"
+      ],
+      "second_pass_median_seconds": 2.2268
+    },
+    {
+      "mode": "pattern_background_one",
+      "baseline_memory_mib": {
+        "WorkingSetSize": 54.27,
+        "PeakWorkingSetSize": 54.27,
+        "PagefileUsage": 33.66,
+        "PeakPagefileUsage": 33.66,
+        "PrivateUsage": 33.66
+      },
+      "opencv_threads": 1,
+      "openblas_env": "1",
+      "session_seconds": 0.2949,
+      "runs": [
+        {
+          "seconds": 2.6617,
+          "memory_mib": {
+            "WorkingSetSize": 1086.41,
+            "PeakWorkingSetSize": 1087.41,
+            "PagefileUsage": 1535.14,
+            "PeakPagefileUsage": 1536.15,
+            "PrivateUsage": 1535.14
+          }
+        },
+        {
+          "seconds": 2.3699,
+          "memory_mib": {
+            "WorkingSetSize": 1094.39,
+            "PeakWorkingSetSize": 1095.39,
+            "PagefileUsage": 1535.14,
+            "PeakPagefileUsage": 1536.16,
+            "PrivateUsage": 1535.14
+          }
+        },
+        {
+          "seconds": 2.6965,
+          "memory_mib": {
+            "WorkingSetSize": 1094.39,
+            "PeakWorkingSetSize": 1095.39,
+            "PagefileUsage": 1535.14,
+            "PeakPagefileUsage": 1536.18,
+            "PrivateUsage": 1535.14
+          }
+        },
+        {
+          "seconds": 2.524,
+          "memory_mib": {
+            "WorkingSetSize": 1094.41,
+            "PeakWorkingSetSize": 1095.4,
+            "PagefileUsage": 1535.14,
+            "PeakPagefileUsage": 1536.19,
+            "PrivateUsage": 1535.14
+          }
+        },
+        {
+          "seconds": 2.3555,
+          "memory_mib": {
+            "WorkingSetSize": 1094.41,
+            "PeakWorkingSetSize": 1095.41,
+            "PagefileUsage": 1535.14,
+            "PeakPagefileUsage": 1536.19,
+            "PrivateUsage": 1535.14
+          }
+        },
+        {
+          "seconds": 2.3813,
+          "memory_mib": {
+            "WorkingSetSize": 1094.41,
+            "PeakWorkingSetSize": 1095.41,
+            "PagefileUsage": 1535.14,
+            "PeakPagefileUsage": 1536.19,
+            "PrivateUsage": 1535.14
+          }
+        },
+        {
+          "seconds": 2.3772,
+          "memory_mib": {
+            "WorkingSetSize": 1094.41,
+            "PeakWorkingSetSize": 1095.41,
+            "PagefileUsage": 1535.14,
+            "PeakPagefileUsage": 1536.19,
+            "PrivateUsage": 1535.14
+          }
+        },
+        {
+          "seconds": 2.5035,
+          "memory_mib": {
+            "WorkingSetSize": 1094.42,
+            "PeakWorkingSetSize": 1095.42,
+            "PagefileUsage": 1535.14,
+            "PeakPagefileUsage": 1536.19,
+            "PrivateUsage": 1535.14
+          }
+        }
+      ],
+      "output_hash": "1d6746bd1aeedfa768cf2c1f6a1c12ebdea40181deeaff6b82318ce46e41b6ff",
+      "per_crop_hashes": [
+        "131edd673e2882c0d1c5d238e82f08b39e87fffb1e8ade6a674499e575df4d66",
+        "f0c0e46f43200cb607854e321021d6498d3aa96e6a9ebd855878b8287cd5c7b1",
+        "3d6ad78a01d409d3ca099dbef91bc785a2cee5b00e389c01ac0be7d54d7637d2",
+        "79f0175b3665218f726676255d1f871dbe6440451a7a2034378d17fc7f5c4847",
+        "131edd673e2882c0d1c5d238e82f08b39e87fffb1e8ade6a674499e575df4d66",
+        "f0c0e46f43200cb607854e321021d6498d3aa96e6a9ebd855878b8287cd5c7b1",
+        "3d6ad78a01d409d3ca099dbef91bc785a2cee5b00e389c01ac0be7d54d7637d2",
+        "79f0175b3665218f726676255d1f871dbe6440451a7a2034378d17fc7f5c4847"
+      ],
+      "second_pass_median_seconds": 2.3792
+    },
+    {
+      "mode": "arena_background_one",
+      "baseline_memory_mib": {
+        "WorkingSetSize": 54.34,
+        "PeakWorkingSetSize": 54.34,
+        "PagefileUsage": 33.73,
+        "PeakPagefileUsage": 33.73,
+        "PrivateUsage": 33.73
+      },
+      "opencv_threads": 1,
+      "openblas_env": "1",
+      "session_seconds": 0.1138,
+      "runs": [
+        {
+          "seconds": 2.8696,
+          "memory_mib": {
+            "WorkingSetSize": 111.79,
+            "PeakWorkingSetSize": 998.75,
+            "PagefileUsage": 87.53,
+            "PeakPagefileUsage": 976.34,
+            "PrivateUsage": 87.53
+          }
+        },
+        {
+          "seconds": 2.7176,
+          "memory_mib": {
+            "WorkingSetSize": 111.79,
+            "PeakWorkingSetSize": 1014.83,
+            "PagefileUsage": 87.53,
+            "PeakPagefileUsage": 1248.85,
+            "PrivateUsage": 87.53
+          }
+        },
+        {
+          "seconds": 2.7171,
+          "memory_mib": {
+            "WorkingSetSize": 111.8,
+            "PeakWorkingSetSize": 1014.83,
+            "PagefileUsage": 87.53,
+            "PeakPagefileUsage": 1248.85,
+            "PrivateUsage": 87.53
+          }
+        },
+        {
+          "seconds": 2.688,
+          "memory_mib": {
+            "WorkingSetSize": 111.81,
+            "PeakWorkingSetSize": 1014.83,
+            "PagefileUsage": 87.53,
+            "PeakPagefileUsage": 1248.85,
+            "PrivateUsage": 87.53
+          }
+        },
+        {
+          "seconds": 2.6955,
+          "memory_mib": {
+            "WorkingSetSize": 111.81,
+            "PeakWorkingSetSize": 1014.86,
+            "PagefileUsage": 87.53,
+            "PeakPagefileUsage": 1248.85,
+            "PrivateUsage": 87.53
+          }
+        },
+        {
+          "seconds": 2.7087,
+          "memory_mib": {
+            "WorkingSetSize": 111.81,
+            "PeakWorkingSetSize": 1014.86,
+            "PagefileUsage": 87.53,
+            "PeakPagefileUsage": 1248.85,
+            "PrivateUsage": 87.53
+          }
+        },
+        {
+          "seconds": 2.7116,
+          "memory_mib": {
+            "WorkingSetSize": 111.82,
+            "PeakWorkingSetSize": 1014.86,
+            "PagefileUsage": 87.53,
+            "PeakPagefileUsage": 1248.86,
+            "PrivateUsage": 87.53
+          }
+        },
+        {
+          "seconds": 2.747,
+          "memory_mib": {
+            "WorkingSetSize": 111.82,
+            "PeakWorkingSetSize": 1014.87,
+            "PagefileUsage": 87.53,
+            "PeakPagefileUsage": 1248.86,
+            "PrivateUsage": 87.53
+          }
+        }
+      ],
+      "output_hash": "1d6746bd1aeedfa768cf2c1f6a1c12ebdea40181deeaff6b82318ce46e41b6ff",
+      "per_crop_hashes": [
+        "131edd673e2882c0d1c5d238e82f08b39e87fffb1e8ade6a674499e575df4d66",
+        "f0c0e46f43200cb607854e321021d6498d3aa96e6a9ebd855878b8287cd5c7b1",
+        "3d6ad78a01d409d3ca099dbef91bc785a2cee5b00e389c01ac0be7d54d7637d2",
+        "79f0175b3665218f726676255d1f871dbe6440451a7a2034378d17fc7f5c4847",
+        "131edd673e2882c0d1c5d238e82f08b39e87fffb1e8ade6a674499e575df4d66",
+        "f0c0e46f43200cb607854e321021d6498d3aa96e6a9ebd855878b8287cd5c7b1",
+        "3d6ad78a01d409d3ca099dbef91bc785a2cee5b00e389c01ac0be7d54d7637d2",
+        "79f0175b3665218f726676255d1f871dbe6440451a7a2034378d17fc7f5c4847"
+      ],
+      "second_pass_median_seconds": 2.7101
+    }
+  ],
+  "all_outputs_hash_identical": true
+}

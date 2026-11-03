@@ -17,10 +17,17 @@ def provider_order(available, preference='auto'):
 
 
 class InferenceEngine:
-    def __init__(self,path,preference=None,device_id=None,session_factory=None,available=None):
+    def __init__(self,path,preference=None,device_id=None,session_factory=None,available=None,cpu_threads=None):
         self.path=str(path)
         self.preference=preference or os.environ.get('OCLAST_DEVICE','auto').lower()
         self.device_id=int(device_id if device_id is not None else os.environ.get('OCLAST_GPU_DEVICE_ID','0'))
+        # Leave CPU capacity for image decoding, the browser, and the OS. Fixed
+        # 512px tiles do not benefit from unbounded laptop-wide thread pools.
+        logical_cpus=os.cpu_count() or 1
+        requested_threads=cpu_threads if cpu_threads is not None else os.environ.get('OCLAST_CPU_THREADS')
+        self.cpu_threads=int(requested_threads) if requested_threads is not None else min(4,max(1,logical_cpus//2))
+        if self.cpu_threads < 1:
+            raise ValueError('OCLAST_CPU_THREADS must be a positive integer')
         self.available=list(available if available is not None else ort.get_available_providers())
         self.pending=provider_order(self.available,self.preference)
         self.factory=session_factory or ort.InferenceSession
@@ -32,16 +39,29 @@ class InferenceEngine:
         self._activate_next()
 
     def _activate_next(self):
+        # Drop failed GPU allocations before constructing a CPU replacement.
+        # Keeping both sessions alive can turn a recoverable GPU error into OOM.
+        self.session=None
+        self.provider=None
+        session=None
         while self.pending:
+            session=None
             candidate=self.pending.pop(0)
             try:
                 if candidate=='CUDAExecutionProvider' and hasattr(ort,'preload_dlls'):
                     ort.preload_dlls()
                 options=ort.SessionOptions()
-                options.intra_op_num_threads=4
+                options.intra_op_num_threads=self.cpu_threads
                 options.inter_op_num_threads=1
                 options.execution_mode=ort.ExecutionMode.ORT_SEQUENTIAL
-                if candidate=='DmlExecutionProvider':
+                # Sleeping workers keep the laptop responsive between tiles/jobs.
+                options.add_session_config_entry('session.intra_op.allow_spinning','0')
+                options.add_session_config_entry('session.inter_op.allow_spinning','0')
+                if candidate in ('CPUExecutionProvider','DmlExecutionProvider'):
+                    # DirectML requires this. On CPU, disabling the pattern's
+                    # additional cached reservation plus bounded native pools
+                    # halved measured tile-process commit at a modest time cost.
+                    # This is an allocation policy, not a model/precision change.
                     options.enable_mem_pattern=False
                 providers=['CPUExecutionProvider'] if candidate=='CPUExecutionProvider' else [(candidate,{'device_id':self.device_id}),'CPUExecutionProvider']
                 session=self.factory(self.path,sess_options=options,providers=providers)
@@ -69,6 +89,8 @@ class InferenceEngine:
                         raise
                     self.failures.append(dict(provider=self.provider,reason=str(exc)[:2000]))
                     log.warning('OCLAST %s inference failed; retrying this tile with the next backend: %s',self.provider,exc)
+                    # The failed run traceback can itself retain the old session.
+                    exc.__traceback__=None
                     self._activate_next()
 
     def get_inputs(self):
@@ -81,10 +103,14 @@ class InferenceEngine:
         return self.session.get_providers()
 
     def info(self):
-        with self.lock:
-            mixed='CPUExecutionProvider' in self.used and any(p in GPU_PROVIDERS for p in self.used)
-            device='mixed' if mixed else ('cpu' if self.provider=='CPUExecutionProvider' else 'gpu')
-            return dict(status='active' if self.used else 'ready',device=device,
-                        active_provider=self.provider,providers_used=self.used[:],
-                        available_providers=self.available[:],gpu_device_id=self.device_id if device!='cpu' else None,
-                        preference=self.preference,fallback_events=self.failures[:])
+        # Health polling must not wait for native inference to finish. Capture
+        # small metadata snapshots, rather than taking the execution lock.
+        provider=self.provider
+        used=self.used[:]
+        failures=self.failures[:]
+        mixed='CPUExecutionProvider' in used and any(p in GPU_PROVIDERS for p in used)
+        device='mixed' if mixed else ('cpu' if provider=='CPUExecutionProvider' else 'gpu')
+        return dict(status='switching' if provider is None else ('active' if used else 'ready'),device=device,
+                    active_provider=provider,providers_used=used,
+                    available_providers=self.available[:],gpu_device_id=self.device_id if device!='cpu' else None,
+                    preference=self.preference,cpu_threads=self.cpu_threads,fallback_events=failures)
